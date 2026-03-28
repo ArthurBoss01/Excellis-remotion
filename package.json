@@ -1,0 +1,21 @@
+{
+  "name": "excellis-remotion",
+  "version": "1.0.0",
+  "description": "Vidéos de présentation Excellis avec Remotion",
+  "scripts": {
+    "start": "npx remotion studio",
+    "build": "npx remotion render src/src/Root.tsx ExcellisVideo out/ExcellisVideo.mp4",
+    "still": "npx remotion still src/src/Root.tsx ExcellisVideo out/still.png"
+  },
+  "dependencies": {
+    "@remotion/cli": "^4.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "remotion": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^5.0.0"
+  }
+}
