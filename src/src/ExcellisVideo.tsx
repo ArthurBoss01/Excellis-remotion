@@ -7,16 +7,14 @@ import {
   useVideoConfig,
 } from "remotion";
 
-const NAVY   = "#0D2045";
-const NAVY2  = "#162d5e";
-const GOLD   = "#D4A82F";
-const WHITE  = "#FFFFFF";
-const LIGHT  = "#E8EDF5";
-const GREEN  = "#2ECC71";
+const NAVY  = "#0D2045";
+const NAVY2 = "#162d5e";
+const GOLD  = "#D4A82F";
+const WHITE = "#FFFFFF";
+const LIGHT = "#E8EDF5";
+const GREEN = "#2ECC71";
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
-
-const clamp = (v: number) => Math.max(0, Math.min(1, v));
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 const fadeIn = (frame: number, start: number, dur = 20) =>
   interpolate(frame - start, [0, dur], [0, 1], {
@@ -24,269 +22,201 @@ const fadeIn = (frame: number, start: number, dur = 20) =>
     extrapolateRight: "clamp" as const,
   });
 
-const slideUp = (frame: number, start: number, fps: number, dist = 50) => {
-  const p = spring({ frame: frame - start, fps, config: { damping: 20, stiffness: 130 } });
-  return `translateY(${interpolate(p, [0, 1], [dist, 0])}px)`;
+const useSlideUp = (startFrame: number, dist = 60) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const p = spring({ frame: frame - startFrame, fps, config: { damping: 20, stiffness: 130 } });
+  return {
+    opacity: fadeIn(frame, startFrame, 18),
+    transform: `translateY(${interpolate(p, [0, 1], [dist, 0])}px)`,
+  };
 };
 
-const slideRight = (frame: number, start: number, fps: number, dist = 80) => {
-  const p = spring({ frame: frame - start, fps, config: { damping: 18, stiffness: 100 } });
-  return `translateX(${interpolate(p, [0, 1], [dist, 0])}px)`;
-};
-
-// ── Écran 1 : Intro logo (frames 0–60 = 2 s) ─────────────────────────────────
+// ── Scène 1 : Logo intro (0–75 frames = 2.5 s) ───────────────────────────────
 const IntroScreen: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const scaleP = spring({ frame, fps, config: { damping: 12, stiffness: 70 } });
-  const scale  = interpolate(scaleP, [0, 1], [0.4, 1]);
-  const opacity = fadeIn(frame, 0, 18);
-
-  // Halo doré pulsant
-  const haloScale = 1 + 0.04 * Math.sin((frame / fps) * Math.PI * 2);
+  const scaleP  = spring({ frame, fps, config: { damping: 12, stiffness: 70 } });
+  const scale   = interpolate(scaleP, [0, 1], [0.3, 1]);
+  const opacity = fadeIn(frame, 0, 20);
+  const halo    = 1 + 0.04 * Math.sin((frame / fps) * Math.PI * 2);
 
   return (
-    <AbsoluteFill
-      style={{ background: NAVY, alignItems: "center", justifyContent: "center", overflow: "hidden" }}
-    >
-      {/* Fond radial */}
-      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 65% 65% at 50% 50%, #1e3d7a 0%, ${NAVY} 70%)` }} />
+    <AbsoluteFill style={{ background: NAVY, alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 70% 50% at 50% 50%, #1e3d7a 0%, ${NAVY} 70%)` }} />
 
-      {/* Halo */}
-      <div style={{
-        position: "absolute",
-        width: 340, height: 340, borderRadius: "50%",
-        border: `2px solid rgba(212,168,47,0.18)`,
-        transform: `scale(${haloScale})`,
-      }} />
-      <div style={{
-        position: "absolute",
-        width: 420, height: 420, borderRadius: "50%",
-        border: `1px solid rgba(212,168,47,0.08)`,
-        transform: `scale(${haloScale * 1.05})`,
-      }} />
+      {/* Halos */}
+      {[380, 500, 620].map((size, i) => (
+        <div key={size} style={{
+          position: "absolute", width: size, height: size, borderRadius: "50%",
+          border: `${i === 0 ? 2 : 1}px solid rgba(212,168,47,${0.18 - i * 0.05})`,
+          transform: `scale(${halo * (1 + i * 0.03)})`,
+        }} />
+      ))}
 
       {/* Logo */}
-      <div style={{ opacity, transform: `scale(${scale})`, display: "flex", flexDirection: "column", alignItems: "center", gap: 10, zIndex: 1 }}>
-        <svg width="90" height="55" viewBox="0 0 100 60" fill="none">
+      <div style={{ opacity, transform: `scale(${scale})`, display: "flex", flexDirection: "column", alignItems: "center", gap: 14, zIndex: 1 }}>
+        <svg width="110" height="68" viewBox="0 0 100 60" fill="none">
           <polygon points="10,55 20,20 35,40 50,10 65,40 80,20 90,55" fill={GOLD} strokeLinejoin="round" />
           <rect x="8" y="52" width="84" height="8" rx="4" fill={GOLD} />
           <circle cx="10" cy="20" r="5" fill={GOLD} />
           <circle cx="50" cy="10" r="5" fill={GOLD} />
           <circle cx="90" cy="20" r="5" fill={GOLD} />
         </svg>
-        <div style={{ fontSize: 80, fontFamily: "Georgia, serif", color: WHITE, lineHeight: 1, marginTop: -8 }}>E</div>
-        <div style={{ fontSize: 30, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: "7px", fontWeight: "bold" }}>EXCELLIS</div>
-        <div style={{ fontSize: 14, color: GOLD, letterSpacing: "9px", fontFamily: "Georgia, serif" }}>P R I V I L È G E</div>
+        <div style={{ fontSize: 110, fontFamily: "Georgia, serif", color: WHITE, lineHeight: 1, marginTop: -12 }}>E</div>
+        <div style={{ fontSize: 38, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: "9px", fontWeight: "bold" }}>EXCELLIS</div>
+        <div style={{ fontSize: 18, color: GOLD, letterSpacing: "11px", fontFamily: "Georgia, serif" }}>P R I V I L È G E</div>
       </div>
     </AbsoluteFill>
   );
 };
 
-// ── Composant iPhone ─────────────────────────────────────────────────────────
-interface IPhoneMessage {
-  text: string;
-  icon: string;
-  color: string;
-  frame: number;
-}
+// ── Scène 2 : Texte accroche + iPhone (75–270 frames = 6.5 s) ────────────────
+interface IPhoneMessage { text: string; icon: string; frame: number }
 
-const IPhoneMockup: React.FC<{ messages: IPhoneMessage[]; globalFrame: number }> = ({ messages, globalFrame }) => {
+const IPhoneMockup: React.FC<{ messages: IPhoneMessage[]; gf: number }> = ({ messages, gf }) => {
   const { fps } = useVideoConfig();
-  const W = 260, H = 520;
-  const R = 36;
-  const BORDER = 8;
-  const screenBg = "#0a0a1a";
+  const W = 420, H = 760, R = 52, BORDER = 10;
 
   return (
     <div style={{
-      width: W, height: H,
-      borderRadius: R,
-      background: "#1a1a1a",
-      border: `${BORDER}px solid #2a2a2a`,
-      boxShadow: `0 0 0 1px #444, 0 30px 80px rgba(0,0,0,0.6), 0 0 40px rgba(212,168,47,0.12)`,
-      position: "relative",
-      overflow: "hidden",
-      display: "flex",
-      flexDirection: "column",
+      width: W, height: H, borderRadius: R,
+      background: "#1c1c1e",
+      border: `${BORDER}px solid #2c2c2e`,
+      boxShadow: `0 0 0 1px #444, 0 40px 100px rgba(0,0,0,0.7), 0 0 60px rgba(212,168,47,0.15)`,
+      position: "relative", overflow: "hidden",
+      display: "flex", flexDirection: "column",
     }}>
-      {/* Encoche (notch) */}
+      {/* Notch dynamique island */}
       <div style={{
-        position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
-        width: 100, height: 24, background: "#1a1a1a", borderRadius: "0 0 18px 18px",
-        zIndex: 10,
+        position: "absolute", top: 10, left: "50%", transform: "translateX(-50%)",
+        width: 120, height: 30, background: "#1c1c1e", borderRadius: 20, zIndex: 10,
       }} />
 
       {/* Écran */}
       <div style={{
-        flex: 1, background: screenBg,
+        flex: 1, background: "#0a0a1a",
         borderRadius: R - BORDER,
         display: "flex", flexDirection: "column",
-        alignItems: "center",
-        padding: "36px 18px 20px",
-        gap: 12,
-        overflow: "hidden",
+        padding: "52px 22px 28px",
+        gap: 16, overflow: "hidden",
       }}>
-        {/* En-tête app */}
-        <div style={{
-          opacity: fadeIn(globalFrame, 5, 15),
-          display: "flex", alignItems: "center", gap: 8, marginBottom: 8,
-        }}>
-          <svg width="20" height="14" viewBox="0 0 100 60" fill="none">
+        {/* Header app */}
+        <div style={{ opacity: fadeIn(gf, 5, 15), display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+          <svg width="22" height="14" viewBox="0 0 100 60" fill="none">
             <polygon points="10,55 20,20 35,40 50,10 65,40 80,20 90,55" fill={GOLD} />
           </svg>
-          <span style={{ color: GOLD, fontSize: 12, fontFamily: "Georgia, serif", letterSpacing: "3px" }}>EXCELLIS</span>
+          <span style={{ color: GOLD, fontSize: 14, fontFamily: "Georgia, serif", letterSpacing: "4px" }}>EXCELLIS</span>
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6 }}>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: GREEN }} />
+            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>En ligne</span>
+          </div>
         </div>
 
         {/* Séparateur */}
-        <div style={{ width: "80%", height: 1, background: "rgba(212,168,47,0.2)", marginBottom: 4, opacity: fadeIn(globalFrame, 8, 12) }} />
+        <div style={{ width: "100%", height: 1, background: "rgba(212,168,47,0.2)", opacity: fadeIn(gf, 8, 12) }} />
 
         {/* Messages */}
         {messages.map((msg) => {
-          const appeared = globalFrame >= msg.frame;
-          const op = appeared ? fadeIn(globalFrame, msg.frame, 15) : 0;
+          const appeared = gf >= msg.frame;
+          const op = appeared ? fadeIn(gf, msg.frame, 15) : 0;
           const ty = appeared
-            ? interpolate(
-                spring({ frame: globalFrame - msg.frame, fps, config: { damping: 18, stiffness: 120 } }),
-                [0, 1], [30, 0]
-              )
-            : 30;
+            ? interpolate(spring({ frame: gf - msg.frame, fps, config: { damping: 18, stiffness: 120 } }), [0, 1], [35, 0])
+            : 35;
 
           return (
             <div key={msg.text} style={{
-              opacity: op,
-              transform: `translateY(${ty}px)`,
-              width: "100%",
+              opacity: op, transform: `translateY(${ty}px)`,
               background: "rgba(255,255,255,0.05)",
-              borderRadius: 14,
-              padding: "12px 14px",
-              border: `1px solid rgba(212,168,47,0.15)`,
-              display: "flex", alignItems: "center", gap: 12,
+              borderRadius: 18, padding: "16px 18px",
+              border: "1px solid rgba(212,168,47,0.18)",
+              display: "flex", alignItems: "center", gap: 16,
             }}>
-              {/* Icône */}
               <div style={{
-                width: 36, height: 36, borderRadius: "50%",
-                background: `rgba(${msg.color},0.15)`,
+                width: 46, height: 46, borderRadius: "50%",
+                background: "rgba(212,168,47,0.12)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 18, flexShrink: 0,
-              }}>
-                {msg.icon}
-              </div>
-              {/* Texte */}
-              <div style={{ color: WHITE, fontSize: 13, fontFamily: "Georgia, serif", lineHeight: 1.4 }}>
-                {msg.text}
-              </div>
+                fontSize: 22, flexShrink: 0,
+              }}>{msg.icon}</div>
+              <div style={{ color: WHITE, fontSize: 16, fontFamily: "Georgia, serif", lineHeight: 1.4 }}>{msg.text}</div>
             </div>
           );
         })}
 
-        {/* Barre de statut fictive */}
+        {/* Indicateur disponibilité */}
         <div style={{
-          marginTop: "auto",
-          opacity: fadeIn(globalFrame, 10, 20),
-          display: "flex", gap: 6, alignItems: "center",
+          marginTop: "auto", opacity: fadeIn(gf, 12, 20),
+          display: "flex", gap: 8, alignItems: "center", justifyContent: "center",
         }}>
-          <div style={{ width: 6, height: 6, borderRadius: "50%", background: GREEN }} />
-          <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 10, letterSpacing: "1px" }}>Service disponible 24/7</span>
+          <div style={{ width: 7, height: 7, borderRadius: "50%", background: GREEN }} />
+          <span style={{ color: "rgba(255,255,255,0.45)", fontSize: 12, letterSpacing: "1px" }}>Service disponible 24h/24 · 7j/7</span>
         </div>
       </div>
 
-      {/* Bouton home */}
-      <div style={{
-        position: "absolute", bottom: 8, left: "50%", transform: "translateX(-50%)",
-        width: 100, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.3)",
-      }} />
+      {/* Barre home */}
+      <div style={{ position: "absolute", bottom: 10, left: "50%", transform: "translateX(-50%)", width: 130, height: 5, borderRadius: 3, background: "rgba(255,255,255,0.3)" }} />
     </div>
   );
 };
 
-// ── Écran 2 : iPhone + messages (frames 60–255 = 6.5 s) ──────────────────────
 const IPhoneScreen: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Entrée de l'iPhone depuis la droite
-  const phoneP = spring({ frame, fps, config: { damping: 16, stiffness: 90 } });
-  const phoneX  = interpolate(phoneP, [0, 1], [600, 0]);
-  const phoneOp = fadeIn(frame, 0, 20);
-
-  // Entrée du texte de gauche
-  const titleOp = fadeIn(frame, 15, 20);
-  const titleTx = interpolate(
-    spring({ frame: frame - 15, fps, config: { damping: 18, stiffness: 110 } }),
-    [0, 1], [-80, 0]
-  );
+  const titleAnim = useSlideUp(0, 70);
+  const phoneP    = spring({ frame: frame - 20, fps, config: { damping: 16, stiffness: 90 } });
+  const phoneOp   = fadeIn(frame, 20, 20);
+  const phoneY    = interpolate(phoneP, [0, 1], [120, 0]);
 
   const messages: IPhoneMessage[] = [
-    { text: "Sourcing 100% fiable & vérifié",        icon: "✅", color: "46,204,113",  frame: 40 },
-    { text: "Clients déjà satisfaits de nos services", icon: "⭐", color: "212,168,47", frame: 85 },
-    { text: "Satisfait ou remboursé, garanti",        icon: "🛡️", color: "52,152,219", frame: 130 },
+    { text: "Sourcing 100% fiable & vérifié",          icon: "✅", frame: 45 },
+    { text: "Clients déjà satisfaits de nos services", icon: "⭐", frame: 90 },
+    { text: "Satisfait ou remboursé, garanti",         icon: "🛡️", frame: 135 },
   ];
 
   return (
     <AbsoluteFill style={{
       background: NAVY,
+      flexDirection: "column",
       alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "row",
-      gap: 80,
-      padding: "0 80px",
+      justifyContent: "flex-start",
+      paddingTop: 100,
+      gap: 60,
     }}>
-      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 90% 70% at 50% 50%, ${NAVY2} 0%, ${NAVY} 75%)` }} />
+      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 80% 60% at 50% 30%, ${NAVY2} 0%, ${NAVY} 70%)` }} />
 
-      {/* Texte gauche */}
-      <div style={{
-        opacity: titleOp,
-        transform: `translateX(${titleTx}px)`,
-        flex: 1, zIndex: 1,
-        display: "flex", flexDirection: "column", gap: 16,
-      }}>
-        <div style={{ color: GOLD, fontSize: 12, letterSpacing: "5px", fontFamily: "Georgia, serif" }}>POURQUOI NOUS ?</div>
-        <div style={{ color: WHITE, fontSize: 36, fontFamily: "Georgia, serif", lineHeight: 1.3, fontWeight: "bold" }}>
+      {/* Titre accroche */}
+      <div style={{ ...titleAnim, zIndex: 1, textAlign: "center", padding: "0 60px" }}>
+        <div style={{ color: GOLD, fontSize: 16, letterSpacing: "6px", fontFamily: "Georgia, serif", marginBottom: 16 }}>POURQUOI NOUS ?</div>
+        <div style={{ color: WHITE, fontSize: 52, fontFamily: "Georgia, serif", fontWeight: "bold", lineHeight: 1.25 }}>
           Une expérience<br />
           <span style={{ color: GOLD }}>sur mesure</span>,<br />
           à chaque instant.
         </div>
-        <div style={{ width: 50, height: 2, background: GOLD }} />
-        <div style={{ color: LIGHT, fontSize: 15, opacity: 0.7, lineHeight: 1.6, maxWidth: 340 }}>
-          Conciergerie · Événementiel · Accès VIP<br />
-          Votre satisfaction, notre priorité absolue.
-        </div>
+        <div style={{ width: 60, height: 3, background: GOLD, margin: "20px auto 0" }} />
       </div>
 
       {/* iPhone */}
-      <div style={{
-        opacity: phoneOp,
-        transform: `translateX(${phoneX}px)`,
-        zIndex: 1, flexShrink: 0,
-      }}>
-        <IPhoneMockup messages={messages} globalFrame={frame} />
+      <div style={{ opacity: phoneOp, transform: `translateY(${phoneY}px)`, zIndex: 1 }}>
+        <IPhoneMockup messages={messages} gf={frame} />
       </div>
     </AbsoluteFill>
   );
 };
 
-// ── Écran 3 : Badges de confiance (frames 255–390 = 4.5 s) ───────────────────
-interface Badge {
-  icon: string;
-  title: string;
-  sub: string;
-  delay: number;
-}
-
+// ── Scène 3 : Badges confiance (270–405 frames = 4.5 s) ──────────────────────
 const TrustScreen: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
 
-  const badges: Badge[] = [
-    { icon: "✅", title: "Sourcing fiable",          sub: "Partenaires triés sur le volet",    delay: 10 },
-    { icon: "🏆", title: "Clients satisfaits",        sub: "Des centaines d'expériences réussies", delay: 35 },
-    { icon: "🛡️", title: "Satisfait ou remboursé",   sub: "Zéro risque, 100% confiance",      delay: 60 },
-    { icon: "⚡", title: "Réactivité 24h/24",         sub: "Disponible quand vous avez besoin", delay: 85 },
+  const badges = [
+    { icon: "✅", title: "Sourcing fiable",         sub: "Partenaires triés sur le volet",        delay: 10 },
+    { icon: "🏆", title: "Clients satisfaits",       sub: "Des centaines d'expériences réussies",  delay: 40 },
+    { icon: "🛡️", title: "Satisfait ou remboursé",  sub: "Zéro risque, 100% confiance",           delay: 70 },
+    { icon: "⚡", title: "Réactivité 24h/24",        sub: "Disponible quand vous avez besoin",     delay: 100 },
   ];
 
-  const titleOp = fadeIn(frame, 0, 20);
+  const titleAnim = useSlideUp(0, 60);
 
   return (
     <AbsoluteFill style={{
@@ -294,43 +224,37 @@ const TrustScreen: React.FC = () => {
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
-      gap: 40,
-      padding: "0 100px",
+      gap: 48,
+      padding: "0 60px",
     }}>
-      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 80% 60% at 50% 50%, ${NAVY2} 0%, ${NAVY} 80%)` }} />
+      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 80% 60% at 50% 40%, ${NAVY2} 0%, ${NAVY} 80%)` }} />
 
       {/* Titre */}
-      <div style={{ opacity: titleOp, zIndex: 1, textAlign: "center" }}>
-        <div style={{ color: GOLD, fontSize: 12, letterSpacing: "6px", fontFamily: "Georgia, serif", marginBottom: 12 }}>NOS ENGAGEMENTS</div>
-        <div style={{ color: WHITE, fontSize: 32, fontFamily: "Georgia, serif", fontWeight: "bold" }}>
-          Ce qui fait la différence Excellis
+      <div style={{ ...titleAnim, zIndex: 1, textAlign: "center" }}>
+        <div style={{ color: GOLD, fontSize: 16, letterSpacing: "6px", fontFamily: "Georgia, serif", marginBottom: 16 }}>NOS ENGAGEMENTS</div>
+        <div style={{ color: WHITE, fontSize: 46, fontFamily: "Georgia, serif", fontWeight: "bold", lineHeight: 1.25 }}>
+          Ce qui fait la<br />
+          <span style={{ color: GOLD }}>différence</span> Excellis
         </div>
       </div>
 
-      {/* Grille 2×2 */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24,
-        width: "100%", maxWidth: 900, zIndex: 1,
-      }}>
+      {/* Badges verticaux */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 22, width: "100%", zIndex: 1 }}>
         {badges.map((b) => {
-          const op = fadeIn(frame, b.delay, 18);
-          const ty = interpolate(
-            spring({ frame: frame - b.delay, fps, config: { damping: 20, stiffness: 120 } }),
-            [0, 1], [40, 0]
-          );
+          const anim = useSlideUp(b.delay, 50);
           return (
             <div key={b.title} style={{
-              opacity: op, transform: `translateY(${ty}px)`,
+              ...anim,
               background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(212,168,47,0.2)",
-              borderRadius: 16,
-              padding: "24px 28px",
-              display: "flex", alignItems: "flex-start", gap: 18,
+              border: "1px solid rgba(212,168,47,0.22)",
+              borderRadius: 20,
+              padding: "28px 32px",
+              display: "flex", alignItems: "center", gap: 24,
             }}>
-              <div style={{ fontSize: 32, flexShrink: 0, marginTop: 2 }}>{b.icon}</div>
+              <div style={{ fontSize: 40, flexShrink: 0 }}>{b.icon}</div>
               <div>
-                <div style={{ color: WHITE, fontSize: 18, fontFamily: "Georgia, serif", fontWeight: "bold", marginBottom: 6 }}>{b.title}</div>
-                <div style={{ color: LIGHT, fontSize: 13, opacity: 0.65, lineHeight: 1.5 }}>{b.sub}</div>
+                <div style={{ color: WHITE, fontSize: 24, fontFamily: "Georgia, serif", fontWeight: "bold", marginBottom: 6 }}>{b.title}</div>
+                <div style={{ color: LIGHT, fontSize: 16, opacity: 0.65, lineHeight: 1.4 }}>{b.sub}</div>
               </div>
             </div>
           );
@@ -340,65 +264,44 @@ const TrustScreen: React.FC = () => {
   );
 };
 
-// ── Écran 4 : Slogan final (frames 390–450 = 2 s) ────────────────────────────
+// ── Scène 4 : Slogan final (405–450 frames = 1.5 s) ──────────────────────────
 const SloganScreen: React.FC = () => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
 
-  const allOp = fadeIn(frame, 0, 25);
-  const lineW = interpolate(frame, [15, 45], [0, 260], { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const });
-  const textTy = interpolate(
-    spring({ frame: frame - 20, fps, config: { damping: 18, stiffness: 110 } }),
-    [0, 1], [40, 0]
-  );
+  const allOp  = fadeIn(frame, 0, 12);
+  const lineW  = interpolate(frame, [5, 30], [0, 340], { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const });
+  const textAnim = useSlideUp(5, 40);
 
   return (
-    <AbsoluteFill style={{
-      background: NAVY, opacity: allOp,
-      alignItems: "center", justifyContent: "center", flexDirection: "column",
-    }}>
-      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 70% 70% at 50% 40%, #1e3d7a 0%, ${NAVY} 75%)` }} />
+    <AbsoluteFill style={{ background: NAVY, opacity: allOp, alignItems: "center", justifyContent: "center", flexDirection: "column" }}>
+      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 70% 60% at 50% 45%, #1e3d7a 0%, ${NAVY} 75%)` }} />
 
-      {/* Lignes latérales */}
-      <div style={{ position: "absolute", left: 0, top: "50%", width: lineW / 2, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD})`, zIndex: 1 }} />
-      <div style={{ position: "absolute", right: 0, top: "50%", width: lineW / 2, height: 1, background: `linear-gradient(270deg, transparent, ${GOLD})`, zIndex: 1 }} />
+      <div style={{ position: "absolute", top: "50%", left: 0, width: lineW / 2, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD})`, zIndex: 1 }} />
+      <div style={{ position: "absolute", top: "50%", right: 0, width: lineW / 2, height: 1, background: `linear-gradient(270deg, transparent, ${GOLD})`, zIndex: 1 }} />
 
-      <div style={{ zIndex: 1, textAlign: "center", transform: `translateY(${textTy}px)`, padding: "0 80px" }}>
-        <div style={{ fontSize: 11, color: GOLD, letterSpacing: "6px", fontFamily: "Georgia, serif", marginBottom: 20 }}>NOTRE PROMESSE</div>
-        <div style={{ fontSize: 34, color: WHITE, fontFamily: "Georgia, serif", lineHeight: 1.45, fontStyle: "italic", maxWidth: 700 }}>
-          "Votre satisfaction fait<br />de vous notre priorité"
+      <div style={{ ...textAnim, zIndex: 1, textAlign: "center", padding: "0 80px" }}>
+        <div style={{ fontSize: 15, color: GOLD, letterSpacing: "7px", fontFamily: "Georgia, serif", marginBottom: 24 }}>NOTRE PROMESSE</div>
+        <div style={{ fontSize: 46, color: WHITE, fontFamily: "Georgia, serif", lineHeight: 1.4, fontStyle: "italic" }}>
+          "Votre satisfaction<br />
+          fait de vous<br />
+          notre priorité"
         </div>
-        <div style={{ width: 60, height: 2, background: GOLD, margin: "28px auto 24px" }} />
-        <div style={{ fontSize: 24, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: "5px" }}>EXCELLIS</div>
-        <div style={{ fontSize: 12, color: GOLD, letterSpacing: "7px", marginTop: 6 }}>P R I V I L È G E</div>
+        <div style={{ width: 70, height: 3, background: GOLD, margin: "36px auto 32px" }} />
+        <div style={{ fontSize: 32, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: "7px" }}>EXCELLIS</div>
+        <div style={{ fontSize: 16, color: GOLD, letterSpacing: "9px", marginTop: 10 }}>P R I V I L È G E</div>
       </div>
     </AbsoluteFill>
   );
 };
 
-// ── Composition principale : 15 s @ 30 fps = 450 frames ──────────────────────
+// ── Composition principale 1080×1920, 15 s @ 30 fps ──────────────────────────
 export const ExcellisVideo: React.FC = () => {
   return (
     <AbsoluteFill>
-      {/* Scène 1 : Logo intro — 2 s */}
-      <Sequence from={0} durationInFrames={60}>
-        <IntroScreen />
-      </Sequence>
-
-      {/* Scène 2 : iPhone + raisons — 6.5 s */}
-      <Sequence from={60} durationInFrames={195}>
-        <IPhoneScreen />
-      </Sequence>
-
-      {/* Scène 3 : Badges de confiance — 4.5 s */}
-      <Sequence from={255} durationInFrames={135}>
-        <TrustScreen />
-      </Sequence>
-
-      {/* Scène 4 : Slogan final — 2 s */}
-      <Sequence from={390} durationInFrames={60}>
-        <SloganScreen />
-      </Sequence>
+      <Sequence from={0}   durationInFrames={75}><IntroScreen /></Sequence>
+      <Sequence from={75}  durationInFrames={195}><IPhoneScreen /></Sequence>
+      <Sequence from={270} durationInFrames={135}><TrustScreen /></Sequence>
+      <Sequence from={405} durationInFrames={45}><SloganScreen /></Sequence>
     </AbsoluteFill>
   );
 };
