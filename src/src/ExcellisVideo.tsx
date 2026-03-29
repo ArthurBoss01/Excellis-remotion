@@ -1,8 +1,10 @@
 import {
   AbsoluteFill,
+  Audio,
   interpolate,
   Sequence,
   spring,
+  staticFile,
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
@@ -356,6 +358,9 @@ const SloganScreen: React.FC = () => {
 export const ExcellisVideo: React.FC = () => {
   return (
     <AbsoluteFill>
+      {/* Musique ambient sur toute la vidéo */}
+      <Audio src={staticFile("music.wav")} volume={1} />
+
       <Sequence from={0}   durationInFrames={75}><IntroScreen /></Sequence>
       <Sequence from={75}  durationInFrames={225}><IPhoneScreen /></Sequence>
       <Sequence from={300} durationInFrames={105}><TrustScreen /></Sequence>
