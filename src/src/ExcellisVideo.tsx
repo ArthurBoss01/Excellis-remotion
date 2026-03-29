@@ -101,7 +101,7 @@ interface IPhoneMessage {
 
 const IPhoneMockup: React.FC<{ messages: IPhoneMessage[]; gf: number }> = ({ messages, gf }) => {
   const { fps } = useVideoConfig();
-  const W = 560, H = 900, R = 56, BORDER = 12;
+  const W = 660, H = 1020, R = 60, BORDER = 13;
 
   return (
     <div style={{
@@ -123,18 +123,18 @@ const IPhoneMockup: React.FC<{ messages: IPhoneMessage[]; gf: number }> = ({ mes
         flex: 1, background: "#07071a",
         borderRadius: R - BORDER,
         display: "flex", flexDirection: "column",
-        padding: "48px 18px 22px",
-        gap: 11, overflow: "hidden",
+        padding: "52px 22px 26px",
+        gap: 14, overflow: "hidden",
       }}>
         {/* Header */}
         <div style={{ opacity: fadeIn(gf, 5, 15), display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
           <svg width="18" height="12" viewBox="0 0 100 60" fill="none">
             <polygon points="10,55 20,20 35,40 50,10 65,40 80,20 90,55" fill={GOLD} />
           </svg>
-          <span style={{ color: GOLD, fontSize: 13, fontFamily: "Georgia, serif", letterSpacing: "4px" }}>EXCELLIS</span>
+          <span style={{ color: GOLD, fontSize: 17, fontFamily: "Georgia, serif", letterSpacing: "4px" }}>EXCELLIS</span>
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 5 }}>
-            <div style={{ width: 7, height: 7, borderRadius: "50%", background: GREEN }} />
-            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 10 }}>En ligne</span>
+            <div style={{ width: 8, height: 8, borderRadius: "50%", background: GREEN }} />
+            <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>En ligne</span>
           </div>
         </div>
 
@@ -152,25 +152,25 @@ const IPhoneMockup: React.FC<{ messages: IPhoneMessage[]; gf: number }> = ({ mes
             <div key={msg.text} style={{
               opacity: op, transform: `translateY(${ty}px)`,
               background: "rgba(255,255,255,0.04)",
-              borderRadius: 16, padding: "12px 14px",
-              border: "1px solid rgba(212,168,47,0.15)",
-              display: "flex", alignItems: "center", gap: 13,
+              borderRadius: 18, padding: "16px 18px",
+              border: "1px solid rgba(212,168,47,0.18)",
+              display: "flex", alignItems: "center", gap: 16,
             }}>
               <div style={{
-                width: 42, height: 42, borderRadius: "50%",
+                width: 52, height: 52, borderRadius: "50%",
                 background: "rgba(212,168,47,0.1)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 20, flexShrink: 0,
+                fontSize: 26, flexShrink: 0,
               }}>{msg.icon}</div>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ color: WHITE, fontSize: 14, fontFamily: "Georgia, serif", lineHeight: 1.35 }}>{msg.text}</div>
-                {msg.sub && <div style={{ color: LIGHT, fontSize: 11, opacity: 0.55, marginTop: 3 }}>{msg.sub}</div>}
+                <div style={{ color: WHITE, fontSize: 19, fontFamily: "Georgia, serif", lineHeight: 1.35 }}>{msg.text}</div>
+                {msg.sub && <div style={{ color: LIGHT, fontSize: 14, opacity: 0.6, marginTop: 4 }}>{msg.sub}</div>}
               </div>
               {msg.badge && (
                 <div style={{
                   background: msg.badgeColor ?? GOLD,
                   borderRadius: 8, padding: "3px 8px", flexShrink: 0,
-                  fontSize: 10, fontWeight: "bold", color: NAVY, letterSpacing: "0.5px",
+                  fontSize: 13, fontWeight: "bold", color: NAVY, letterSpacing: "0.5px",
                 }}>{msg.badge}</div>
               )}
             </div>
@@ -183,7 +183,7 @@ const IPhoneMockup: React.FC<{ messages: IPhoneMessage[]; gf: number }> = ({ mes
           display: "flex", gap: 7, alignItems: "center", justifyContent: "center",
         }}>
           <div style={{ width: 7, height: 7, borderRadius: "50%", background: GREEN }} />
-          <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 11, letterSpacing: "0.5px" }}>Disponible 24h/24 · 7j/7</span>
+          <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, letterSpacing: "0.5px" }}>Disponible 24h/24 · 7j/7</span>
         </div>
       </div>
 
@@ -202,42 +202,43 @@ const IPhoneScreen: React.FC = () => {
   const phoneOp   = fadeIn(frame, 15, 20);
   const phoneY    = interpolate(phoneP, [0, 1], [130, 0]);
 
+  // Messages espacés sur 11 s (330 frames) : ~50 frames ≈ 1.7 s entre chaque
   const messages: IPhoneMessage[] = [
     {
       text: "Événements SOLD OUT ? On s'en occupe.",
       sub: "Accès garantis aux soirées les plus demandées",
       icon: "🎟️", badge: "SOLD OUT", badgeColor: RED,
-      frame: 30,
+      frame: 35,
     },
     {
       text: "Loges VIP · Galas · Red Carpets",
       sub: "Places premium introuvables au grand public",
       icon: "👑", badge: "VIP",
-      frame: 60,
+      frame: 90,
     },
     {
       text: "Avant-premières & soirées sur invitation",
       sub: "Concerts, matchs, fashion weeks…",
       icon: "🌟",
-      frame: 90,
+      frame: 145,
     },
     {
       text: "Sourcing 100% fiable & vérifié",
       sub: "Partenaires triés sur le volet, zéro arnaque",
       icon: "✅",
-      frame: 130,
+      frame: 200,
     },
     {
       text: "Des centaines de clients satisfaits",
       sub: "Expériences livrées, promesses tenues",
       icon: "⭐",
-      frame: 160,
+      frame: 255,
     },
     {
       text: "Satisfait ou remboursé — sans discussion",
       sub: "Zéro risque, 100% confiance",
       icon: "🛡️",
-      frame: 190,
+      frame: 305,
     },
   ];
 
@@ -354,17 +355,20 @@ const SloganScreen: React.FC = () => {
   );
 };
 
-// ── Composition principale 1080×1920, 15 s @ 30 fps = 450 frames ─────────────
+// ── Composition principale 1080×1920, 20 s @ 30 fps = 600 frames ─────────────
+// Scène 1 : Logo intro      0  → 75  (2.5 s)
+// Scène 2 : iPhone          75 → 405 (11 s)  ← plus de temps pour lire
+// Scène 3 : Trust badges   405 → 525 (4 s)
+// Scène 4 : Slogan         525 → 600 (2.5 s)
 export const ExcellisVideo: React.FC = () => {
   return (
     <AbsoluteFill>
-      {/* Musique ambient sur toute la vidéo */}
       <Audio src={staticFile("music.wav")} volume={1} />
 
       <Sequence from={0}   durationInFrames={75}><IntroScreen /></Sequence>
-      <Sequence from={75}  durationInFrames={225}><IPhoneScreen /></Sequence>
-      <Sequence from={300} durationInFrames={105}><TrustScreen /></Sequence>
-      <Sequence from={405} durationInFrames={45}><SloganScreen /></Sequence>
+      <Sequence from={75}  durationInFrames={330}><IPhoneScreen /></Sequence>
+      <Sequence from={405} durationInFrames={120}><TrustScreen /></Sequence>
+      <Sequence from={525} durationInFrames={75}><SloganScreen /></Sequence>
     </AbsoluteFill>
   );
 };

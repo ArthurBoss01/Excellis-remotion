@@ -8,7 +8,7 @@ const fs   = require("fs");
 const path = require("path");
 
 const SR       = 44100;
-const DURATION = 15.5;
+const DURATION = 21.5;
 const N        = Math.floor(SR * DURATION);
 const BPM      = 140;
 const BEAT     = SR * 60 / BPM;          // samples par beat
@@ -325,7 +325,7 @@ const melodyRev = reverb(
 mix(left,  melodyRev, 0, 0.45, 0.55, right);
 
 // ── Normalisation + fade-out final ────────────────────────────────────────────
-const fadeStart = Math.floor((DURATION - 1.8) * SR);
+const fadeStart = Math.floor((DURATION - 2.0) * SR);
 for (let i = fadeStart; i < N; i++) {
   const t = (i - fadeStart) / (N - fadeStart);
   const f = 1 - t;
