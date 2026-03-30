@@ -80,7 +80,7 @@ const IntroScreen: React.FC = () => {
 
       {/* Tagline */}
       <div style={{ opacity: tagOp, transform: `translateY(${tagTy}px)`, zIndex: 1, textAlign: "center" }}>
-        <div style={{ fontSize: 36, color: LIGHT, fontFamily: "Georgia, serif", fontStyle: "italic", opacity: 0.85 }}>
+        <div style={{ fontSize: 48, color: LIGHT, fontFamily: "Georgia, serif", fontStyle: "italic", opacity: 0.85 }}>
           Votre conciergerie privée<br />pour l'inaccessible.
         </div>
       </div>
@@ -171,7 +171,7 @@ const IPhoneMockup: React.FC<{ messages: IPhoneMessage[]; gf: number }> = ({ mes
                   {msg.text}
                 </div>
                 {msg.sub && (
-                  <div style={{ color: LIGHT, fontSize: 26, opacity: 0.6, marginTop: 8, lineHeight: 1.3 }}>
+                  <div style={{ color: LIGHT, fontSize: 30, opacity: 0.7, marginTop: 10, lineHeight: 1.35 }}>
                     {msg.sub}
                   </div>
                 )}
@@ -275,7 +275,7 @@ const IPhoneScreen: React.FC = () => {
           <span style={{ color: GOLD }}>Plus un obstacle.</span>
         </div>
         <div style={{ width: 80, height: 4, background: GOLD, margin: "20px auto 16px" }} />
-        <div style={{ color: LIGHT, fontSize: 32, fontFamily: "Georgia, serif", opacity: 0.75, lineHeight: 1.4 }}>
+        <div style={{ color: LIGHT, fontSize: 40, fontFamily: "Georgia, serif", opacity: 0.75, lineHeight: 1.4 }}>
           Événements, galas, concerts, loges VIP…<br />
           Nous ouvrons les portes que vous croyiez fermées.
         </div>
@@ -334,7 +334,7 @@ const TrustScreen: React.FC = () => {
               <div style={{ fontSize: 56, flexShrink: 0 }}>{b.icon}</div>
               <div>
                 <div style={{ color: WHITE, fontSize: 38, fontFamily: "Georgia, serif", fontWeight: "bold", marginBottom: 8 }}>{b.title}</div>
-                <div style={{ color: LIGHT, fontSize: 28, opacity: 0.65, lineHeight: 1.4 }}>{b.sub}</div>
+                <div style={{ color: LIGHT, fontSize: 34, opacity: 0.7, lineHeight: 1.4 }}>{b.sub}</div>
               </div>
             </div>
           );
@@ -368,7 +368,7 @@ const SloganScreen: React.FC = () => {
         <div style={{ width: 90, height: 4, background: GOLD, margin: "40px auto 36px" }} />
         <div style={{ fontSize: 52, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: "10px" }}>EXCELLIS</div>
         <div style={{ fontSize: 24, color: GOLD, letterSpacing: "12px", marginTop: 14 }}>P R I V I L È G E</div>
-        <div style={{ fontSize: 30, color: LIGHT, fontFamily: "Georgia, serif", opacity: 0.65, marginTop: 30, lineHeight: 1.5 }}>
+        <div style={{ fontSize: 36, color: LIGHT, fontFamily: "Georgia, serif", opacity: 0.7, marginTop: 30, lineHeight: 1.5 }}>
           Contactez-nous — votre première expérience<br />vous attend dès aujourd'hui.
         </div>
       </div>
