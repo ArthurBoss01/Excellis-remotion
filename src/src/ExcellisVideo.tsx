@@ -81,7 +81,7 @@ const IntroScreen: React.FC = () => {
       {/* Tagline */}
       <div style={{ opacity: tagOp, transform: `translateY(${tagTy}px)`, zIndex: 1, textAlign: "center" }}>
         <div style={{ fontSize: 36, color: LIGHT, fontFamily: "Georgia, serif", fontStyle: "italic", opacity: 0.85 }}>
-          L'accès à l'inaccessible.
+          Votre conciergerie privée<br />pour l'inaccessible.
         </div>
       </div>
     </AbsoluteFill>
@@ -217,37 +217,37 @@ const IPhoneScreen: React.FC = () => {
   const messages: IPhoneMessage[] = [
     {
       text: "Événements SOLD OUT ? On s'en occupe.",
-      sub: "Accès garantis aux soirées les plus demandées",
+      sub: "Votre place est réservée — même quand c'est complet.",
       icon: "🎟️", badge: "SOLD OUT", badgeColor: RED,
       frame: 35,
     },
     {
       text: "Loges VIP · Galas · Red Carpets",
-      sub: "Places premium introuvables au grand public",
+      sub: "Vivez les coulisses de l'événement, pas la foule.",
       icon: "👑", badge: "VIP",
       frame: 90,
     },
     {
       text: "Avant-premières & soirées sur invitation",
-      sub: "Concerts, matchs, fashion weeks…",
+      sub: "De la Fashion Week aux matchs de légende — on ouvre les portes.",
       icon: "🌟",
       frame: 145,
     },
     {
       text: "Sourcing 100% fiable & vérifié",
-      sub: "Partenaires sélectionnés, zéro arnaque",
+      sub: "Chaque prestataire est testé, validé et approuvé par nos soins.",
       icon: "✅",
       frame: 200,
     },
     {
       text: "Des centaines de clients satisfaits",
-      sub: "Expériences livrées, promesses tenues",
+      sub: "Ils nous ont fait confiance. Ils reviennent.",
       icon: "⭐",
       frame: 255,
     },
     {
       text: "Satisfait ou remboursé — sans discussion",
-      sub: "Zéro risque, 100% confiance",
+      sub: "Nous tenons nos engagements — ou on vous rembourse. Point.",
       icon: "🛡️",
       frame: 305,
     },
@@ -274,7 +274,11 @@ const IPhoneScreen: React.FC = () => {
           <span style={{ color: RED, fontStyle: "italic" }}>SOLD OUT</span> ?<br />
           <span style={{ color: GOLD }}>Plus un obstacle.</span>
         </div>
-        <div style={{ width: 80, height: 4, background: GOLD, margin: "20px auto 0" }} />
+        <div style={{ width: 80, height: 4, background: GOLD, margin: "20px auto 16px" }} />
+        <div style={{ color: LIGHT, fontSize: 32, fontFamily: "Georgia, serif", opacity: 0.75, lineHeight: 1.4 }}>
+          Événements, galas, concerts, loges VIP…<br />
+          Nous ouvrons les portes que vous croyiez fermées.
+        </div>
       </div>
 
       {/* iPhone pleine largeur */}
@@ -290,10 +294,10 @@ const TrustScreen: React.FC = () => {
   const frame = useCurrentFrame();
 
   const badges = [
-    { icon: "🎟️", title: "Accès événements exclusifs",  sub: "SOLD OUT n'est plus dans votre vocabulaire",  delay: 5  },
-    { icon: "👑", title: "Service conciergerie VIP",     sub: "Une équipe dédiée à votre service",           delay: 30 },
-    { icon: "✅", title: "Sourcing 100% fiable",         sub: "Partenaires certifiés, aucune mauvaise surprise", delay: 55 },
-    { icon: "🛡️", title: "Satisfait ou remboursé",      sub: "Zéro risque, engagement total",               delay: 80 },
+    { icon: "🎟️", title: "Accès événements exclusifs",  sub: "Le mot « complet » ne vous concerne plus.",                          delay: 5  },
+    { icon: "👑", title: "Service conciergerie VIP",     sub: "Un expert à vos côtés, disponible quand vous le décidez.",          delay: 30 },
+    { icon: "✅", title: "Sourcing 100% fiable",         sub: "Chaque prestataire est choisi avec la même exigence que pour nous.", delay: 55 },
+    { icon: "🛡️", title: "Satisfait ou remboursé",      sub: "Notre service vous convient — ou vous êtes remboursé. Sans condition.", delay: 80 },
   ];
 
   const titleAnim = useSlideUp(0, 60);
@@ -364,6 +368,9 @@ const SloganScreen: React.FC = () => {
         <div style={{ width: 90, height: 4, background: GOLD, margin: "40px auto 36px" }} />
         <div style={{ fontSize: 52, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: "10px" }}>EXCELLIS</div>
         <div style={{ fontSize: 24, color: GOLD, letterSpacing: "12px", marginTop: 14 }}>P R I V I L È G E</div>
+        <div style={{ fontSize: 30, color: LIGHT, fontFamily: "Georgia, serif", opacity: 0.65, marginTop: 30, lineHeight: 1.5 }}>
+          Contactez-nous — votre première expérience<br />vous attend dès aujourd'hui.
+        </div>
       </div>
     </AbsoluteFill>
   );
