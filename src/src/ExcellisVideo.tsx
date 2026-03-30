@@ -145,13 +145,15 @@ const IPhoneMockup: React.FC<{ messages: IPhoneMessage[]; gf: number }> = ({ mes
         {messages.map((msg) => {
           const appeared = gf >= msg.frame;
           const op = appeared ? fadeIn(gf, msg.frame, 14) : 0;
-          const ty = appeared
-            ? interpolate(spring({ frame: gf - msg.frame, fps, config: { damping: 18, stiffness: 125 } }), [0, 1], [50, 0])
-            : 50;
+          const p = appeared
+            ? spring({ frame: gf - msg.frame, fps, config: { damping: 18, stiffness: 125 } })
+            : 0;
+          const ty    = interpolate(p, [0, 1], [50, 0]);
+          const scale = interpolate(p, [0, 0.6, 1], [0.82, 1.06, 1]);
 
           return (
             <div key={msg.text} style={{
-              opacity: op, transform: `translateY(${ty}px)`,
+              opacity: op, transform: `translateY(${ty}px) scale(${scale})`,
               background: "rgba(255,255,255,0.05)",
               borderRadius: 28, padding: "28px 30px",
               border: "1px solid rgba(212,168,47,0.18)",
