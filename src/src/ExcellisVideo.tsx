@@ -189,14 +189,6 @@ const IPhoneMockup: React.FC<{ messages: IPhoneMessage[]; gf: number }> = ({ mes
           );
         })}
 
-        {/* Disponibilité */}
-        <div style={{
-          marginTop: "auto", opacity: fadeIn(gf, 15, 20),
-          display: "flex", gap: 10, alignItems: "center", justifyContent: "center",
-        }}>
-          <div style={{ width: 10, height: 10, borderRadius: "50%", background: GREEN }} />
-          <span style={{ color: "rgba(255,255,255,0.4)", fontSize: 22 }}>Disponible 24h/24 · 7j/7</span>
-        </div>
       </div>
 
       {/* Barre home */}
@@ -297,7 +289,7 @@ const TrustScreen: React.FC = () => {
     { icon: "🎟️", title: "Accès événements exclusifs",  sub: "Le mot « complet » ne vous concerne plus.",                          delay: 5  },
     { icon: "👑", title: "Service conciergerie VIP",     sub: "Un expert à vos côtés, disponible quand vous le décidez.",          delay: 30 },
     { icon: "✅", title: "Sourcing 100% fiable",         sub: "Chaque prestataire est choisi avec la même exigence que pour nous.", delay: 55 },
-    { icon: "🛡️", title: "Satisfait ou remboursé",      sub: "Notre service vous convient — ou vous êtes remboursé. Sans condition.", delay: 80 },
+    { icon: "🛡️", title: "Satisfait ou remboursé",      sub: "Notre service vous convient — ou vous êtes remboursé.",               delay: 80 },
   ];
 
   const titleAnim = useSlideUp(0, 60);
