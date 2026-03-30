@@ -237,12 +237,6 @@ const IPhoneScreen: React.FC = () => {
       icon: "⭐",
       frame: 255,
     },
-    {
-      text: "Satisfait ou remboursé — sans discussion",
-      sub: "Nous tenons nos engagements — ou on vous rembourse. Point.",
-      icon: "🛡️",
-      frame: 305,
-    },
   ];
 
   return (
@@ -289,7 +283,7 @@ const TrustScreen: React.FC = () => {
     { icon: "🎟️", title: "Accès événements exclusifs",  sub: "Le mot « complet » ne vous concerne plus.",                          delay: 5  },
     { icon: "👑", title: "Service conciergerie VIP",     sub: "Un expert à vos côtés, disponible quand vous le décidez.",          delay: 30 },
     { icon: "✅", title: "Sourcing 100% fiable",         sub: "Chaque prestataire est choisi avec la même exigence que pour nous.", delay: 55 },
-    { icon: "🛡️", title: "Satisfait ou remboursé",      sub: "Notre service vous convient — ou vous êtes remboursé.",               delay: 80 },
+    { icon: "🛡️", title: "Satisfait ou remboursé",      sub: "Notre service vous convient — ou vous êtes remboursé.",              delay: 80 },
   ];
 
   const titleAnim = useSlideUp(0, 60);
