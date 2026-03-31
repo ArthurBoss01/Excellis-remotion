@@ -1,0 +1,18 @@
+{
+  "name": "excellis-remotion",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx remotion studio",
+    "render:celine": "npx remotion render CelineDionTikTok out/celine-dion-tiktok.mp4",
+    "render:excellis": "npx remotion render ExcellisVideo out/excellis-video.mp4"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "remotion": "4.0.291"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.291",
+    "typescript": "5.7.3"
+  }
+}
