@@ -1,5 +1,4 @@
-// CelineDionTikTok.jsx — v3 avec vraie photo découpée (mix-blend-mode: multiply)
-// Photo à déposer dans public/celine.jpg  (fond blanc/clair → cutout automatique)
+// CelineDionTikTok.jsx — v4 avec vraie photo découpée (IMG_4446_cutout.png)
 // Format: 1080×1920 (TikTok 9:16) — 15s (450 frames @ 30fps)
 
 import {
@@ -21,14 +20,12 @@ const WHITE   = "#FFFFFF";
 const SILVER  = "#C8D4E0";
 const ROSE    = "#C8547A";
 
-// ─── Photo avec effet découpé ─────────────────────────────────────────────────
-// mix-blend-mode: multiply  →  fond blanc devient transparent sur fond sombre
-// filter: brightness(2.4)   →  compense l'assombrissement du sujet
+// ─── Photo découpée (PNG transparent) ────────────────────────────────────────
 const CelinePhoto = ({ opacity = 1, side = "right", scale = 1, yOffset = 0, fadeStart = 0 }) => {
   const frame = useCurrentFrame();
-  const float = Math.sin(frame / 45) * 4;
+  const float = Math.sin(frame / 45) * 5;
   const animOpacity = interpolate(
-    frame, [fadeStart, fadeStart + 22], [0, opacity],
+    frame, [fadeStart, fadeStart + 25], [0, opacity],
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
@@ -38,55 +35,43 @@ const CelinePhoto = ({ opacity = 1, side = "right", scale = 1, yOffset = 0, fade
     <div style={{
       position: "absolute",
       bottom: yOffset,
-      [isRight ? "right" : "left"]: -20,
-      width: 720,
-      height: 1080,
+      [isRight ? "right" : "left"]: isRight ? -30 : -30,
+      width: 780,
+      height: 780,
       opacity: animOpacity,
       transform: `scale(${scale}) translateY(${float}px)`,
       transformOrigin: "bottom center",
       pointerEvents: "none",
-      overflow: "hidden",
     }}>
 
-      {/* ── Photo principale ── */}
+      {/* Halo doré derrière le sujet */}
+      <div style={{
+        position: "absolute",
+        inset: -40,
+        background: "radial-gradient(ellipse 55% 55% at 50% 42%, rgba(212,168,47,0.18) 0%, rgba(100,50,180,0.08) 50%, transparent 75%)",
+        filter: "blur(18px)",
+      }} />
+
+      {/* Photo découpée PNG transparent */}
       <img
-        src={staticFile("celine.jpg")}
+        src={staticFile("IMG_4446_cutout.png")}
         style={{
           position: "absolute",
           inset: 0,
           width: "100%",
           height: "100%",
-          objectFit: "cover",
-          objectPosition: "top center",
-          // Fond blanc → transparent sur fond sombre
-          mixBlendMode: "multiply",
-          filter: "brightness(2.4) contrast(1.08) saturate(1.1)",
+          objectFit: "contain",
+          objectPosition: "center top",
+          filter: "drop-shadow(0px 20px 50px rgba(0,0,0,0.85)) drop-shadow(0px 0px 30px rgba(212,168,47,0.12))",
         }}
       />
 
-      {/* ── Dégradé bas : fondu vers le fond ── */}
+      {/* Fondu bas pour ancrer au fond */}
       <div style={{
         position: "absolute",
-        bottom: 0, left: 0, right: 0, height: "38%",
-        background: "linear-gradient(0deg, rgba(5,5,8,1) 0%, rgba(5,5,8,0.6) 40%, transparent 100%)",
+        bottom: 0, left: 0, right: 0, height: "22%",
+        background: "linear-gradient(0deg, rgba(5,5,8,1) 0%, transparent 100%)",
         zIndex: 1,
-      }} />
-
-      {/* ── Dégradé côté intérieur : intégration au texte ── */}
-      <div style={{
-        position: "absolute", inset: 0,
-        background: isRight
-          ? "linear-gradient(90deg, rgba(5,5,8,0.75) 0%, rgba(5,5,8,0.25) 22%, transparent 45%)"
-          : "linear-gradient(270deg, rgba(5,5,8,0.75) 0%, rgba(5,5,8,0.25) 22%, transparent 45%)",
-        zIndex: 1,
-      }} />
-
-      {/* ── Halo doré autour de la silhouette ── */}
-      <div style={{
-        position: "absolute", inset: 0,
-        background: "radial-gradient(ellipse 55% 60% at 50% 38%, rgba(212,168,47,0.08) 0%, transparent 70%)",
-        zIndex: 2,
-        mixBlendMode: "screen",
       }} />
     </div>
   );
