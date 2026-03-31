@@ -1,5 +1,5 @@
-// CelineDionTikTok.jsx — v2 avec silhouette artistique
-// Pour ajouter une vraie photo : déposez-la dans public/celine.jpg
+// CelineDionTikTok.jsx — v3 avec vraie photo découpée (mix-blend-mode: multiply)
+// Photo à déposer dans public/celine.jpg  (fond blanc/clair → cutout automatique)
 // Format: 1080×1920 (TikTok 9:16) — 15s (450 frames @ 30fps)
 
 import {
@@ -9,6 +9,7 @@ import {
   useVideoConfig,
   spring,
   interpolate,
+  staticFile,
 } from "remotion";
 
 const BLACK   = "#050508";
@@ -20,171 +21,73 @@ const WHITE   = "#FFFFFF";
 const SILVER  = "#C8D4E0";
 const ROSE    = "#C8547A";
 
-// ─── Silhouette artistique animée ────────────────────────────────────────────
-// (remplacer par <img src="public/celine.jpg" ... /> avec une vraie photo)
-const CelineSilhouette = ({ opacity = 1, side = "right", scale = 1 }) => {
+// ─── Photo avec effet découpé ─────────────────────────────────────────────────
+// mix-blend-mode: multiply  →  fond blanc devient transparent sur fond sombre
+// filter: brightness(2.4)   →  compense l'assombrissement du sujet
+const CelinePhoto = ({ opacity = 1, side = "right", scale = 1, yOffset = 0, fadeStart = 0 }) => {
   const frame = useCurrentFrame();
-  const floatY = Math.sin(frame / 35) * 6;
-  const glowPulse = 0.3 + Math.sin(frame / 22) * 0.1;
+  const float = Math.sin(frame / 45) * 4;
+  const animOpacity = interpolate(
+    frame, [fadeStart, fadeStart + 22], [0, opacity],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
+  const isRight = side === "right";
 
   return (
     <div style={{
       position: "absolute",
-      bottom: 0,
-      [side === "right" ? "right" : "left"]: "-2%",
-      width: 420,
-      height: 980,
-      opacity,
-      transform: `scale(${scale}) translateY(${floatY}px)`,
+      bottom: yOffset,
+      [isRight ? "right" : "left"]: -20,
+      width: 720,
+      height: 1080,
+      opacity: animOpacity,
+      transform: `scale(${scale}) translateY(${float}px)`,
       transformOrigin: "bottom center",
       pointerEvents: "none",
+      overflow: "hidden",
     }}>
 
-      {/* Spotlight scénique depuis le haut */}
+      {/* ── Photo principale ── */}
+      <img
+        src={staticFile("celine.jpg")}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          objectPosition: "top center",
+          // Fond blanc → transparent sur fond sombre
+          mixBlendMode: "multiply",
+          filter: "brightness(2.4) contrast(1.08) saturate(1.1)",
+        }}
+      />
+
+      {/* ── Dégradé bas : fondu vers le fond ── */}
       <div style={{
         position: "absolute",
-        top: -60, left: "50%",
-        transform: "translateX(-50%)",
-        width: 280, height: 900,
-        background: "linear-gradient(180deg, rgba(255,245,200,0.13) 0%, rgba(255,245,200,0.04) 60%, transparent 100%)",
-        clipPath: "polygon(22% 0%, 78% 0%, 100% 100%, 0% 100%)",
+        bottom: 0, left: 0, right: 0, height: "38%",
+        background: "linear-gradient(0deg, rgba(5,5,8,1) 0%, rgba(5,5,8,0.6) 40%, transparent 100%)",
+        zIndex: 1,
       }} />
 
-      {/* Robe — forme élégante */}
+      {/* ── Dégradé côté intérieur : intégration au texte ── */}
       <div style={{
-        position: "absolute",
-        bottom: 0, left: "50%",
-        transform: "translateX(-50%)",
-        width: 230, height: 570,
-        background: "linear-gradient(180deg, rgba(255,255,255,0.20) 0%, rgba(255,255,255,0.08) 70%, rgba(255,255,255,0.04) 100%)",
-        clipPath: "polygon(18% 0%, 82% 0%, 100% 100%, 0% 100%)",
-        borderRadius: "0 0 30px 30px",
-        filter: "blur(0.5px)",
+        position: "absolute", inset: 0,
+        background: isRight
+          ? "linear-gradient(90deg, rgba(5,5,8,0.75) 0%, rgba(5,5,8,0.25) 22%, transparent 45%)"
+          : "linear-gradient(270deg, rgba(5,5,8,0.75) 0%, rgba(5,5,8,0.25) 22%, transparent 45%)",
+        zIndex: 1,
       }} />
 
-      {/* Taille / haut du corps */}
+      {/* ── Halo doré autour de la silhouette ── */}
       <div style={{
-        position: "absolute",
-        bottom: 530, left: "50%",
-        transform: "translateX(-50%)",
-        width: 90, height: 160,
-        background: "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.18) 100%)",
-        borderRadius: "40% 40% 25% 25%",
-        filter: "blur(0.5px)",
+        position: "absolute", inset: 0,
+        background: "radial-gradient(ellipse 55% 60% at 50% 38%, rgba(212,168,47,0.08) 0%, transparent 70%)",
+        zIndex: 2,
+        mixBlendMode: "screen",
       }} />
-
-      {/* Bras gauche */}
-      <div style={{
-        position: "absolute",
-        bottom: 590, left: "28%",
-        width: 38, height: 130,
-        background: "rgba(255,255,255,0.16)",
-        borderRadius: "20px",
-        transform: "rotate(-25deg)",
-        transformOrigin: "top center",
-      }} />
-
-      {/* Bras droit (tient le micro) */}
-      <div style={{
-        position: "absolute",
-        bottom: 610, right: "26%",
-        width: 38, height: 110,
-        background: "rgba(255,255,255,0.16)",
-        borderRadius: "20px",
-        transform: "rotate(30deg)",
-        transformOrigin: "top center",
-      }} />
-
-      {/* Microphone */}
-      <div style={{
-        position: "absolute",
-        bottom: 720, right: "18%",
-        width: 14, height: 55,
-        background: "rgba(255,255,255,0.35)",
-        borderRadius: "7px",
-        transform: "rotate(20deg)",
-      }} />
-      <div style={{
-        position: "absolute",
-        bottom: 770, right: "16%",
-        width: 24, height: 28,
-        background: "rgba(212,168,47,0.7)",
-        borderRadius: "50%",
-        boxShadow: "0 0 12px rgba(212,168,47,0.8)",
-      }} />
-
-      {/* Cou */}
-      <div style={{
-        position: "absolute",
-        bottom: 685, left: "50%",
-        transform: "translateX(-50%)",
-        width: 28, height: 45,
-        background: "rgba(255,255,255,0.22)",
-        borderRadius: "14px",
-      }} />
-
-      {/* Tête */}
-      <div style={{
-        position: "absolute",
-        bottom: 725, left: "50%",
-        transform: "translateX(-50%)",
-        width: 72, height: 84,
-        background: "linear-gradient(180deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.22) 100%)",
-        borderRadius: "50% 50% 45% 45%",
-        filter: "blur(0.3px)",
-      }} />
-
-      {/* Cheveux */}
-      <div style={{
-        position: "absolute",
-        bottom: 790, left: "50%",
-        transform: "translateX(-52%)",
-        width: 100, height: 60,
-        background: "linear-gradient(180deg, rgba(255,255,255,0.20) 0%, transparent 100%)",
-        borderRadius: "50% 50% 20% 20%",
-      }} />
-
-      {/* Halo doré autour de la silhouette */}
-      <div style={{
-        position: "absolute",
-        inset: -20,
-        background: `radial-gradient(ellipse 50% 70% at 50% 45%, rgba(212,168,47,${glowPulse * 0.4}) 0%, transparent 65%)`,
-        filter: "blur(15px)",
-      }} />
-
-      {/* Lueur sol */}
-      <div style={{
-        position: "absolute",
-        bottom: -10, left: "50%",
-        transform: "translateX(-50%)",
-        width: 280, height: 100,
-        background: `radial-gradient(ellipse, rgba(212,168,47,${glowPulse * 0.7}) 0%, transparent 70%)`,
-        filter: "blur(12px)",
-      }} />
-
-      {/* Particules scintillantes */}
-      {[
-        { x: "15%", y: "20%", d: 0 },
-        { x: "85%", y: "35%", d: 12 },
-        { x: "10%", y: "55%", d: 7 },
-        { x: "88%", y: "60%", d: 18 },
-        { x: "50%", y: "10%", d: 5 },
-        { x: "70%", y: "15%", d: 22 },
-      ].map((p, i) => {
-        const spark = Math.sin((frame + p.d * 8) / 12) * 0.5 + 0.5;
-        return (
-          <div key={i} style={{
-            position: "absolute",
-            left: p.x, top: p.y,
-            width: 3 + (i % 2),
-            height: 3 + (i % 2),
-            borderRadius: "50%",
-            background: i % 2 === 0 ? GOLD_LT : WHITE,
-            opacity: spark * 0.9,
-            boxShadow: `0 0 6px ${i % 2 === 0 ? GOLD_LT : WHITE}`,
-          }} />
-        );
-      })}
     </div>
   );
 };
@@ -195,21 +98,17 @@ const SceneIntro = () => {
   const { fps } = useVideoConfig();
 
   const stars = Array.from({ length: 45 }, (_, i) => ({
-    id: i,
-    x: (i * 73 + 11) % 100,
-    y: (i * 37 + 7)  % 100,
-    size: 1 + (i % 3),
-    phase: i * 0.7,
+    id: i, x: (i * 73 + 11) % 100, y: (i * 37 + 7) % 100,
+    size: 1 + (i % 3), phase: i * 0.7,
   }));
 
-  const spotOpacity = interpolate(frame, [0, 30], [0, 1], { extrapolateRight: "clamp" });
-  const celineOpacity = interpolate(frame, [20, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const spotOpacity  = interpolate(frame, [0, 30],   [0, 1], { extrapolateRight: "clamp" });
+  const celineOpacity = interpolate(frame, [20, 40],  [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const celineScale   = spring({ frame: frame - 20, fps, config: { damping: 20, stiffness: 70 } });
-  const dionOpacity   = interpolate(frame, [35, 55], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const dionOpacity   = interpolate(frame, [35, 55],  [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const dionScale     = spring({ frame: frame - 35, fps, config: { damping: 20, stiffness: 70 } });
-  const lineW         = interpolate(frame, [55, 80], [0, 280], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const subOpacity    = interpolate(frame, [62, 78], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const silOpacity    = interpolate(frame, [10, 45], [0, 0.7], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const lineW         = interpolate(frame, [55, 80],  [0, 280], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const subOpacity    = interpolate(frame, [62, 78],  [0, 1],   { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
     <AbsoluteFill style={{
@@ -217,15 +116,13 @@ const SceneIntro = () => {
       overflow: "hidden",
     }}>
 
-      {/* Étoiles */}
+      {/* Étoiles scintillantes */}
       {stars.map(s => {
         const twinkle = Math.sin((frame + s.phase * 20) / 14) * 0.35 + 0.45;
         return (
           <div key={s.id} style={{
-            position: "absolute",
-            left: `${s.x}%`, top: `${s.y}%`,
-            width: s.size, height: s.size,
-            borderRadius: "50%",
+            position: "absolute", left: `${s.x}%`, top: `${s.y}%`,
+            width: s.size, height: s.size, borderRadius: "50%",
             background: WHITE,
             opacity: Math.max(0.05, Math.min(1, twinkle)),
             boxShadow: `0 0 ${s.size * 3}px ${WHITE}`,
@@ -233,7 +130,7 @@ const SceneIntro = () => {
         );
       })}
 
-      {/* Spotlight */}
+      {/* Spotlight scénique */}
       <div style={{
         position: "absolute", top: -200, left: "50%",
         transform: "translateX(-50%)",
@@ -242,73 +139,70 @@ const SceneIntro = () => {
         opacity: spotOpacity,
       }} />
 
-      {/* Silhouette artistique */}
-      <CelineSilhouette opacity={silOpacity} side="right" scale={1} />
+      {/* ── Photo Céline — droite, large ── */}
+      <CelinePhoto opacity={0.92} side="right" scale={1} yOffset={0} fadeStart={5} />
 
       {/* CÉLINE */}
       <div style={{
-        position: "absolute", top: "27%", left: 0, right: 0,
-        textAlign: "center",
+        position: "absolute", top: "22%", left: 40, right: 0,
         opacity: celineOpacity,
         transform: `scale(${interpolate(celineScale, [0, 1], [0.88, 1])})`,
-        zIndex: 2,
+        zIndex: 3, transformOrigin: "left center",
       }}>
         <div style={{
-          fontSize: 112,
+          fontSize: 108,
           fontFamily: "Georgia, 'Times New Roman', serif",
           fontStyle: "italic",
           color: WHITE,
-          letterSpacing: 6,
+          letterSpacing: 4,
           lineHeight: 1,
-          textShadow: `0 0 80px rgba(212,168,47,0.55), 0 0 24px rgba(255,255,255,0.2), 0 6px 32px rgba(0,0,0,0.9)`,
+          textShadow: `0 0 80px rgba(212,168,47,0.55), 0 6px 32px rgba(0,0,0,0.9)`,
         }}>Céline</div>
       </div>
 
       {/* DION */}
       <div style={{
-        position: "absolute", top: "43%", left: 0, right: 0,
-        textAlign: "center",
+        position: "absolute", top: "36%", left: 40, right: 0,
         opacity: dionOpacity,
         transform: `scale(${interpolate(dionScale, [0, 1], [0.88, 1])})`,
-        zIndex: 2,
+        zIndex: 3, transformOrigin: "left center",
       }}>
         <div style={{
-          fontSize: 112,
+          fontSize: 108,
           fontFamily: "Georgia, 'Times New Roman', serif",
           fontStyle: "italic",
           color: GOLD,
-          letterSpacing: 6,
+          letterSpacing: 4,
           lineHeight: 1,
-          textShadow: `0 0 80px rgba(212,168,47,0.9), 0 0 30px rgba(212,168,47,0.5), 0 6px 32px rgba(0,0,0,0.9)`,
+          textShadow: `0 0 80px rgba(212,168,47,0.9), 0 4px 30px rgba(0,0,0,0.9)`,
         }}>Dion</div>
       </div>
 
       {/* Ligne or */}
       <div style={{
-        position: "absolute", top: "59%", left: "50%",
-        transform: "translateX(-50%)",
+        position: "absolute", top: "51%", left: 40,
         width: lineW, height: 1,
-        background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`,
-        zIndex: 2,
+        background: `linear-gradient(90deg, ${GOLD}, transparent)`,
+        zIndex: 3,
       }} />
 
       {/* Est de retour */}
       <div style={{
-        position: "absolute", top: "62%", left: 0, right: 0,
-        textAlign: "center", opacity: subOpacity, zIndex: 2,
+        position: "absolute", top: "54%", left: 40,
+        opacity: subOpacity, zIndex: 3,
       }}>
         <div style={{
-          fontSize: 26, color: SILVER,
-          letterSpacing: 10,
+          fontSize: 24, color: SILVER, letterSpacing: 8,
           fontFamily: "Georgia, serif",
-          textTransform: "uppercase",
-          textShadow: "0 2px 12px rgba(0,0,0,0.8)",
-        }}>Est de retour</div>
+          textShadow: "0 2px 12px rgba(0,0,0,0.9)",
+        }}>EST DE RETOUR</div>
       </div>
 
+      {/* Fondu bas */}
       <div style={{
-        position: "absolute", bottom: 0, left: 0, right: 0, height: 350,
-        background: `linear-gradient(0deg, rgba(45,16,96,0.45) 0%, transparent 100%)`,
+        position: "absolute", bottom: 0, left: 0, right: 0, height: 300,
+        background: `linear-gradient(0deg, rgba(13,10,30,0.8) 0%, transparent 100%)`,
+        zIndex: 2,
       }} />
     </AbsoluteFill>
   );
@@ -324,8 +218,6 @@ const SceneConcert = () => {
     opacity: interpolate(frame, [start, start + 18], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
     transform: `translateY(${interpolate(frame, [start, start + 18], [28, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
   });
-
-  const silOpacity = interpolate(frame, [0, 30], [0, 0.55], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
     <AbsoluteFill style={{
@@ -344,43 +236,41 @@ const SceneConcert = () => {
         }} />
       ))}
 
-      {/* Silhouette en fond à gauche */}
-      <CelineSilhouette opacity={silOpacity} side="left" scale={0.85} />
+      {/* ── Photo en fond, gauche, semi-transparente ── */}
+      <CelinePhoto opacity={0.5} side="left" scale={0.9} yOffset={0} fadeStart={0} />
 
       {/* "10 CONCERTS" */}
-      <div style={{ position: "absolute", top: 190, left: 0, right: 0, textAlign: "center", ...fadeUp(10), zIndex: 2 }}>
-        <div style={{ fontSize: 28, color: GOLD, letterSpacing: 10, fontFamily: "Georgia, serif", marginBottom: 4 }}>
+      <div style={{ position: "absolute", top: 200, left: 0, right: 0, textAlign: "center", ...fadeUp(10), zIndex: 3 }}>
+        <div style={{ fontSize: 26, color: GOLD, letterSpacing: 10, fontFamily: "Georgia, serif", marginBottom: 4 }}>
           ANNONCE OFFICIELLE
         </div>
         <div style={{
-          fontSize: 170, fontFamily: "Georgia, serif", fontWeight: "bold",
+          fontSize: 168, fontFamily: "Georgia, serif", fontWeight: "bold",
           color: WHITE, lineHeight: 0.88,
           textShadow: `0 0 60px rgba(212,168,47,0.35)`,
         }}>10</div>
-        <div style={{ fontSize: 46, fontFamily: "Georgia, serif", color: GOLD, letterSpacing: 6, marginTop: -4 }}>
+        <div style={{ fontSize: 44, fontFamily: "Georgia, serif", color: GOLD, letterSpacing: 6, marginTop: -4 }}>
           CONCERTS
         </div>
       </div>
 
       {/* Venue */}
-      <div style={{ position: "absolute", top: "53%", left: 40, right: 40, textAlign: "center", ...fadeUp(35), zIndex: 2 }}>
-        <div style={{ width: 220, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`, margin: "0 auto 20px" }} />
-        <div style={{ fontSize: 18, color: SILVER, letterSpacing: 5, fontFamily: "Georgia, serif", marginBottom: 8 }}>
-          PARIS
-        </div>
-        <div style={{ fontSize: 36, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 1, lineHeight: 1.2 }}>
+      <div style={{ position: "absolute", top: "53%", left: 40, right: 40, textAlign: "center", ...fadeUp(35), zIndex: 3 }}>
+        <div style={{ width: 220, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`, margin: "0 auto 18px" }} />
+        <div style={{ fontSize: 17, color: SILVER, letterSpacing: 5, fontFamily: "Georgia, serif", marginBottom: 8 }}>PARIS</div>
+        <div style={{ fontSize: 34, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", lineHeight: 1.2 }}>
           La Défense Arena
         </div>
-        <div style={{ width: 220, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`, margin: "20px auto 0" }} />
+        <div style={{ width: 220, height: 1, background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`, margin: "18px auto 0" }} />
       </div>
 
       {/* Dates */}
-      <div style={{ position: "absolute", top: "71%", left: 0, right: 0, textAlign: "center", ...fadeUp(55), zIndex: 2 }}>
-        <div style={{ fontSize: 50, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, letterSpacing: 3 }}>
+      <div style={{ position: "absolute", top: "71%", left: 0, right: 0, textAlign: "center", ...fadeUp(55), zIndex: 3 }}>
+        <div style={{ fontSize: 48, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, letterSpacing: 3 }}>
           SEPT — OCT
         </div>
         <div style={{
-          fontSize: 70, fontFamily: "Georgia, serif", fontWeight: "bold",
+          fontSize: 68, fontFamily: "Georgia, serif", fontWeight: "bold",
           color: GOLD, letterSpacing: 10,
           textShadow: `0 0 40px rgba(212,168,47,0.7)`,
         }}>2026</div>
@@ -388,17 +278,14 @@ const SceneConcert = () => {
 
       {/* Badge Excellis */}
       <div style={{
-        position: "absolute", bottom: 90, left: 0, right: 0,
-        textAlign: "center", zIndex: 2,
+        position: "absolute", bottom: 90, left: 0, right: 0, textAlign: "center", zIndex: 3,
         opacity: interpolate(frame, [80, 96], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
         transform: `scale(${interpolate(frame, [80, 96], [0.82, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })})`,
       }}>
         <div style={{
-          display: "inline-block",
-          padding: "14px 36px",
+          display: "inline-block", padding: "14px 36px",
           background: `linear-gradient(135deg, ${PURPLE}, #1A0840)`,
-          border: `1px solid rgba(212,168,47,0.5)`,
-          borderRadius: 50,
+          border: `1px solid rgba(212,168,47,0.5)`, borderRadius: 50,
         }}>
           <div style={{ fontSize: 14, color: GOLD, letterSpacing: 5, fontFamily: "Georgia, serif" }}>BILLETS DISPONIBLES VIA</div>
           <div style={{ fontSize: 24, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 7, marginTop: 4 }}>EXCELLIS</div>
@@ -412,27 +299,20 @@ const SceneConcert = () => {
 const SceneDates = () => {
   const frame = useCurrentFrame();
 
-  const bgOpacity = interpolate(frame, [0, 18], [0, 1], { extrapolateRight: "clamp" });
-  const titleAnim = {
-    opacity: interpolate(frame, [8, 24], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
-  };
+  const bgOpacity  = interpolate(frame, [0, 18], [0, 1], { extrapolateRight: "clamp" });
+  const titleAnim  = { opacity: interpolate(frame, [8, 24], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) };
+  const infoOpacity = interpolate(frame, [82, 98], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   const col1 = [
-    { date: "12 SEPT", day: "Samedi" },
-    { date: "16 SEPT", day: "Mercredi" },
-    { date: "19 SEPT", day: "Samedi" },
-    { date: "23 SEPT", day: "Mercredi" },
+    { date: "12 SEPT", day: "Samedi" },   { date: "16 SEPT", day: "Mercredi" },
+    { date: "19 SEPT", day: "Samedi" },   { date: "23 SEPT", day: "Mercredi" },
     { date: "26 SEPT", day: "Samedi" },
   ];
   const col2 = [
-    { date: "30 SEPT", day: "Mercredi" },
-    { date: "3 OCT",   day: "Samedi" },
-    { date: "7 OCT",   day: "Mercredi" },
-    { date: "10 OCT",  day: "Samedi" },
+    { date: "30 SEPT", day: "Mercredi" }, { date: "3 OCT",   day: "Samedi" },
+    { date: "7 OCT",   day: "Mercredi" }, { date: "10 OCT",  day: "Samedi" },
     { date: "14 OCT",  day: "Mercredi" },
   ];
-
-  const infoOpacity = interpolate(frame, [82, 98], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
     <AbsoluteFill style={{
@@ -442,25 +322,33 @@ const SceneDates = () => {
       <div style={{ position: "absolute", top: -80, right: -80, width: 450, height: 450, borderRadius: "50%", border: "1px solid rgba(212,168,47,0.08)" }} />
       <div style={{ position: "absolute", bottom: -120, left: -80, width: 550, height: 550, borderRadius: "50%", border: "1px solid rgba(212,168,47,0.06)" }} />
 
+      {/* ── Photo petite en fond ── */}
+      <CelinePhoto opacity={0.3} side="right" scale={0.75} yOffset={200} fadeStart={0} />
+
+      {/* Header */}
       <div style={{ ...titleAnim, position: "absolute", top: 130, left: 0, right: 0, textAlign: "center", zIndex: 2 }}>
-        <div style={{ fontSize: 13, color: GOLD, letterSpacing: 8, fontFamily: "Georgia, serif", marginBottom: 10 }}>PARIS LA DÉFENSE ARENA</div>
-        <div style={{ fontSize: 52, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", lineHeight: 1 }}>LES 10 DATES</div>
+        <div style={{ fontSize: 13, color: GOLD, letterSpacing: 8, fontFamily: "Georgia, serif", marginBottom: 10 }}>
+          PARIS LA DEFENSE ARENA
+        </div>
+        <div style={{ fontSize: 52, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", lineHeight: 1 }}>
+          LES 10 DATES
+        </div>
         <div style={{ width: 80, height: 2, background: GOLD, margin: "14px auto 0" }} />
       </div>
 
+      {/* Grille dates */}
       <div style={{ position: "absolute", top: 295, left: 28, right: 28, display: "flex", gap: 14, zIndex: 2 }}>
         <div style={{ flex: 1 }}>
           {col1.map((d, i) => {
             const delay = 20 + i * 11;
             return (
               <div key={d.date} style={{
-                opacity: interpolate(frame - delay, [0, 15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+                opacity:   interpolate(frame - delay, [0, 15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
                 transform: `translateX(${interpolate(frame - delay, [0, 15], [-24, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
                 padding: "13px 14px", marginBottom: 10,
-                background: "rgba(255,255,255,0.04)",
+                background: "rgba(5,5,8,0.7)",
                 border: "1px solid rgba(212,168,47,0.2)",
-                borderRadius: 8,
-                borderLeft: `3px solid ${GOLD}`,
+                borderRadius: 8, borderLeft: `3px solid ${GOLD}`,
               }}>
                 <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", letterSpacing: 2 }}>{d.day}</div>
                 <div style={{ fontSize: 19, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold" }}>{d.date}</div>
@@ -473,13 +361,12 @@ const SceneDates = () => {
             const delay = 24 + i * 11;
             return (
               <div key={d.date} style={{
-                opacity: interpolate(frame - delay, [0, 15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
+                opacity:   interpolate(frame - delay, [0, 15], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }),
                 transform: `translateX(${interpolate(frame - delay, [0, 15], [24, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })}px)`,
                 padding: "13px 14px", marginBottom: 10,
-                background: "rgba(255,255,255,0.04)",
+                background: "rgba(5,5,8,0.7)",
                 border: "1px solid rgba(200,84,122,0.2)",
-                borderRadius: 8,
-                borderLeft: `3px solid ${ROSE}`,
+                borderRadius: 8, borderLeft: `3px solid ${ROSE}`,
               }}>
                 <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", letterSpacing: 2 }}>{d.day}</div>
                 <div style={{ fontSize: 19, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold" }}>{d.date}</div>
@@ -489,14 +376,14 @@ const SceneDates = () => {
         </div>
       </div>
 
+      {/* Vente générale */}
       <div style={{ position: "absolute", bottom: 90, left: 28, right: 28, opacity: infoOpacity, zIndex: 2 }}>
         <div style={{
           padding: "16px 24px",
           background: `linear-gradient(135deg, rgba(212,168,47,0.15), rgba(212,168,47,0.04))`,
-          border: `1px solid rgba(212,168,47,0.4)`,
-          borderRadius: 12, textAlign: "center",
+          border: `1px solid rgba(212,168,47,0.4)`, borderRadius: 12, textAlign: "center",
         }}>
-          <div style={{ fontSize: 12, color: GOLD, letterSpacing: 5 }}>VENTE GÉNÉRALE</div>
+          <div style={{ fontSize: 12, color: GOLD, letterSpacing: 5 }}>VENTE GENERALE</div>
           <div style={{ fontSize: 26, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", marginTop: 4 }}>
             10 AVRIL — 10H00
           </div>
@@ -511,13 +398,12 @@ const SceneCTA = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const bgOpacity   = interpolate(frame, [0, 15], [0, 1], { extrapolateRight: "clamp" });
+  const bgOpacity   = interpolate(frame, [0, 15], [0, 1],  { extrapolateRight: "clamp" });
   const logoScale   = spring({ frame: frame - 10, fps, config: { damping: 16, stiffness: 80 } });
-  const logoOpacity = interpolate(frame, [8, 22], [0, 1], { extrapolateRight: "clamp" });
-  const ctaOpacity  = interpolate(frame, [28, 45], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const logoOpacity = interpolate(frame, [8, 22],  [0, 1],  { extrapolateRight: "clamp" });
+  const ctaOpacity  = interpolate(frame, [28, 45], [0, 1],  { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const ctaY        = interpolate(frame, [28, 45], [22, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   const shimmerX    = interpolate(frame, [38, 85], [-120, 420], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const silOpacity  = interpolate(frame, [0, 25], [0, 0.6], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
     <AbsoluteFill style={{
@@ -527,8 +413,8 @@ const SceneCTA = () => {
       <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 60% 50% at 50% 40%, rgba(45,16,96,0.65) 0%, transparent 70%)` }} />
       <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 40% 30% at 50% 35%, rgba(212,168,47,0.12) 0%, transparent 60%)` }} />
 
-      {/* Silhouette CTA */}
-      <CelineSilhouette opacity={silOpacity} side="right" scale={1.05} />
+      {/* ── Photo grande en fond ── */}
+      <CelinePhoto opacity={0.75} side="right" scale={1.05} yOffset={0} fadeStart={0} />
 
       {/* Particules */}
       {Array.from({ length: 12 }, (_, i) => {
@@ -536,10 +422,8 @@ const SceneCTA = () => {
         return (
           <div key={i} style={{
             position: "absolute",
-            left: `${10 + (i * 9) % 80}%`,
-            top:  `${5  + (i * 13) % 90}%`,
-            width: 2 + (i % 3), height: 2 + (i % 3),
-            borderRadius: "50%",
+            left: `${10 + (i * 9) % 80}%`, top: `${5 + (i * 13) % 90}%`,
+            width: 2 + (i % 3), height: 2 + (i % 3), borderRadius: "50%",
             background: i % 2 === 0 ? GOLD : ROSE,
             opacity: pOpacity,
             boxShadow: `0 0 7px ${i % 2 === 0 ? GOLD : ROSE}`,
@@ -551,7 +435,8 @@ const SceneCTA = () => {
       <div style={{
         opacity: logoOpacity,
         transform: `scale(${interpolate(logoScale, [0, 1], [0.72, 1])})`,
-        display: "flex", flexDirection: "column", alignItems: "center", gap: 14, zIndex: 2,
+        display: "flex", flexDirection: "column", alignItems: "center", gap: 14,
+        zIndex: 3, position: "absolute", left: 0, right: "35%", top: "30%",
       }}>
         <svg width="92" height="54" viewBox="0 0 100 56" fill="none">
           <polygon points="10,50 22,18 36,38 50,8 64,38 78,18 90,50" fill={GOLD} strokeLinejoin="round" />
@@ -561,27 +446,26 @@ const SceneCTA = () => {
           <circle cx="90" cy="18" r="5" fill={GOLD_LT} />
         </svg>
 
-        <div style={{ fontSize: 54, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: 9, fontWeight: "bold" }}>EXCELLIS</div>
-        <div style={{ fontSize: 13, color: GOLD, letterSpacing: 9, fontFamily: "Georgia, serif" }}>C O N C I E R G E R I E</div>
+        <div style={{ fontSize: 50, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: 8, fontWeight: "bold" }}>EXCELLIS</div>
+        <div style={{ fontSize: 12, color: GOLD, letterSpacing: 8, fontFamily: "Georgia, serif" }}>C O N C I E R G E R I E</div>
 
-        <div style={{ position: "relative", width: 330, height: 1, background: GOLD, overflow: "hidden" }}>
+        <div style={{ position: "relative", width: 300, height: 1, background: GOLD, overflow: "hidden" }}>
           <div style={{
             position: "absolute", left: shimmerX, top: 0, bottom: 0, width: 110,
             background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.85), transparent)",
           }} />
         </div>
 
-        <div style={{ opacity: ctaOpacity, transform: `translateY(${ctaY}px)`, textAlign: "center", marginTop: 22 }}>
-          <div style={{ fontSize: 28, color: WHITE, fontFamily: "Georgia, serif", fontStyle: "italic", marginBottom: 24 }}>
+        <div style={{ opacity: ctaOpacity, transform: `translateY(${ctaY}px)`, textAlign: "center", marginTop: 20 }}>
+          <div style={{ fontSize: 26, color: WHITE, fontFamily: "Georgia, serif", fontStyle: "italic", marginBottom: 22 }}>
             Reservez vos billets
           </div>
           <div style={{
-            padding: "17px 48px",
+            padding: "16px 40px",
             background: `linear-gradient(135deg, ${PURPLE} 0%, #1A0840 100%)`,
-            borderRadius: 50,
-            border: `1px solid rgba(212,168,47,0.45)`,
+            borderRadius: 50, border: `1px solid rgba(212,168,47,0.45)`,
           }}>
-            <div style={{ fontSize: 21, color: WHITE, fontFamily: "Georgia, serif", letterSpacing: 3 }}>
+            <div style={{ fontSize: 20, color: WHITE, fontFamily: "Georgia, serif", letterSpacing: 3 }}>
               DM / WhatsApp
             </div>
           </div>
