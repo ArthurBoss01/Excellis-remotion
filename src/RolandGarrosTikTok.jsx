@@ -154,31 +154,31 @@ const SceneStade = () => {
       </div>
 
       {/* ROLAND */}
-      <div style={{ position: "absolute", top: 332, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: rg1Op, transform: `translateX(${rg1X}px)` }}>
-        <div style={{ fontSize: 104, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, letterSpacing: 6, lineHeight: 0.9, textShadow: "0 4px 40px rgba(0,0,0,0.95)" }}>
+      <div style={{ position: "absolute", top: 300, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: rg1Op, transform: `translateX(${rg1X}px)` }}>
+        <div style={{ fontSize: 148, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, letterSpacing: 2, lineHeight: 0.88, textShadow: "0 4px 50px rgba(0,0,0,0.97)" }}>
           ROLAND
         </div>
       </div>
 
       {/* GARROS */}
       <div style={{ position: "absolute", top: 440, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: rg2Op, transform: `translateX(${rg2X}px)` }}>
-        <div style={{ fontSize: 104, fontFamily: "Georgia, serif", fontWeight: "bold", color: CLAY, letterSpacing: 6, lineHeight: 0.9, textShadow: `0 0 80px rgba(196,64,16,0.8), 0 4px 40px rgba(0,0,0,0.95)` }}>
+        <div style={{ fontSize: 148, fontFamily: "Georgia, serif", fontWeight: "bold", color: CLAY, letterSpacing: 2, lineHeight: 0.88, textShadow: `0 0 100px rgba(196,64,16,0.9), 0 4px 50px rgba(0,0,0,0.97)` }}>
           GARROS
         </div>
       </div>
 
-      {/* 2025 badge */}
+      {/* 2026 badge */}
       <div style={{
-        position: "absolute", top: 572, left: 0, right: 0, textAlign: "center", zIndex: 3,
+        position: "absolute", top: 608, left: 0, right: 0, textAlign: "center", zIndex: 3,
         opacity: yearOp,
         transform: `scale(${interpolate(yearSc, [0, 1], [0.6, 1])})`,
       }}>
         <div style={{
-          display: "inline-block", padding: "8px 32px",
+          display: "inline-block", padding: "10px 40px",
           background: `linear-gradient(135deg, ${GREEN}, #0D3D22)`,
           border: `1px solid rgba(255,255,255,0.2)`, borderRadius: 40,
         }}>
-          <div style={{ fontSize: 22, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 8 }}>PARIS 2025</div>
+          <div style={{ fontSize: 30, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 10 }}>PARIS 2026</div>
         </div>
       </div>
     </AbsoluteFill>
@@ -271,27 +271,27 @@ const SceneJoueurs = () => {
           opacity: t1Op,
           transform: `scale(${interpolate(t1Sc, [0, 1], [0.65, 1])})`,
         }}>
-          <div style={{ fontSize: 96, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.9, letterSpacing: -1, textShadow: "0 4px 40px rgba(0,0,0,0.97)" }}>
+          <div style={{ fontSize: 130, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.88, letterSpacing: -2, textShadow: "0 4px 50px rgba(0,0,0,0.97)" }}>
             VOS
           </div>
-          <div style={{ fontSize: 96, fontFamily: "Georgia, serif", fontWeight: "bold", color: CLAY, lineHeight: 0.9, letterSpacing: -1, textShadow: `0 0 70px rgba(196,64,16,0.8), 0 4px 40px rgba(0,0,0,0.97)` }}>
+          <div style={{ fontSize: 130, fontFamily: "Georgia, serif", fontWeight: "bold", color: CLAY, lineHeight: 0.88, letterSpacing: -2, textShadow: `0 0 90px rgba(196,64,16,0.9), 0 4px 50px rgba(0,0,0,0.97)` }}>
             BILLETS
           </div>
         </div>
 
         {/* Ligne séparatrice */}
-        <div style={{ opacity: t2Op, margin: "14px auto", width: 200, height: 2, background: `linear-gradient(90deg, transparent, ${GREEN}, transparent)` }} />
+        <div style={{ opacity: t2Op, margin: "16px auto", width: 220, height: 2, background: `linear-gradient(90deg, transparent, ${GREEN}, transparent)` }} />
 
         {/* TOUTES CATÉGORIES */}
         <div style={{ opacity: t3Op, transform: `translateY(${t3Y}px)` }}>
-          <div style={{ fontSize: 28, color: WHITE, fontFamily: "Georgia, serif", letterSpacing: 4, textShadow: "0 2px 20px rgba(0,0,0,0.97)" }}>
+          <div style={{ fontSize: 38, color: WHITE, fontFamily: "Georgia, serif", letterSpacing: 5, textShadow: "0 2px 20px rgba(0,0,0,0.97)" }}>
             TOUTES CATEGORIES
           </div>
         </div>
 
         {/* TOUTES LES DATES */}
-        <div style={{ opacity: t4Op, transform: `translateY(${t3Y}px)`, marginTop: 6 }}>
-          <div style={{ fontSize: 28, color: SILVER, fontFamily: "Georgia, serif", letterSpacing: 4, fontStyle: "italic", textShadow: "0 2px 20px rgba(0,0,0,0.97)" }}>
+        <div style={{ opacity: t4Op, transform: `translateY(${t3Y}px)`, marginTop: 8 }}>
+          <div style={{ fontSize: 38, color: SILVER, fontFamily: "Georgia, serif", letterSpacing: 5, fontStyle: "italic", textShadow: "0 2px 20px rgba(0,0,0,0.97)" }}>
             TOUTES LES DATES
           </div>
         </div>
@@ -357,8 +357,8 @@ const SceneCTA = () => {
           <circle cx="50" cy="8"  r="5" fill={GOLD_LT} />
           <circle cx="90" cy="18" r="5" fill={GOLD_LT} />
         </svg>
-        <div style={{ fontSize: 54, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: 9, fontWeight: "bold", textShadow: "0 4px 30px rgba(0,0,0,0.95)" }}>EXCELLIS</div>
-        <div style={{ fontSize: 12, color: GOLD, letterSpacing: 9, fontFamily: "Georgia, serif" }}>C O N C I E R G E R I E</div>
+        <div style={{ fontSize: 68, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: 9, fontWeight: "bold", textShadow: "0 4px 30px rgba(0,0,0,0.95)" }}>EXCELLIS</div>
+        <div style={{ fontSize: 15, color: GOLD, letterSpacing: 9, fontFamily: "Georgia, serif" }}>C O N C I E R G E R I E</div>
         <div style={{ position: "relative", width: 280, height: 1.5, background: GOLD, overflow: "hidden", marginTop: 4 }}>
           <div style={{ position: "absolute", left: shimmerX, top: 0, bottom: 0, width: 110, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent)" }} />
         </div>
@@ -367,17 +367,17 @@ const SceneCTA = () => {
       {/* CTA 3 lignes */}
       <div style={{ position: "absolute", top: 420, left: 40, right: 40, textAlign: "center", zIndex: 3 }}>
         <div style={{ opacity: l1Op, transform: `translateY(${l1Y}px)` }}>
-          <div style={{ fontSize: 48, fontFamily: "Georgia, serif", fontStyle: "italic", color: WHITE, lineHeight: 1.1, textShadow: "0 3px 24px rgba(0,0,0,0.97)" }}>
+          <div style={{ fontSize: 66, fontFamily: "Georgia, serif", fontStyle: "italic", color: WHITE, lineHeight: 1.1, textShadow: "0 3px 30px rgba(0,0,0,0.97)" }}>
             Viens vite
           </div>
         </div>
         <div style={{ opacity: l2Op, transform: `translateY(${l2Y}px)` }}>
-          <div style={{ fontSize: 48, fontFamily: "Georgia, serif", fontStyle: "italic", color: CLAY, lineHeight: 1.1, textShadow: `0 0 50px rgba(196,64,16,0.7), 0 3px 24px rgba(0,0,0,0.97)` }}>
+          <div style={{ fontSize: 58, fontFamily: "Georgia, serif", fontStyle: "italic", color: CLAY, lineHeight: 1.1, textShadow: `0 0 60px rgba(196,64,16,0.8), 0 3px 30px rgba(0,0,0,0.97)` }}>
             reserver ta place
           </div>
         </div>
-        <div style={{ opacity: l3Op, transform: `translateY(${l3Y}px)`, marginTop: 8 }}>
-          <div style={{ fontSize: 30, fontFamily: "Georgia, serif", color: SILVER, letterSpacing: 2, fontStyle: "italic", textShadow: "0 2px 20px rgba(0,0,0,0.97)" }}>
+        <div style={{ opacity: l3Op, transform: `translateY(${l3Y}px)`, marginTop: 10 }}>
+          <div style={{ fontSize: 40, fontFamily: "Georgia, serif", color: SILVER, letterSpacing: 2, fontStyle: "italic", textShadow: "0 2px 20px rgba(0,0,0,0.97)" }}>
             sans acompte
           </div>
         </div>
