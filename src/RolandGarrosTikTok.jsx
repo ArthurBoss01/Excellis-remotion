@@ -364,20 +364,28 @@ const SceneCTA = () => {
         </div>
       </div>
 
-      {/* CTA 3 lignes */}
-      <div style={{ position: "absolute", top: 420, left: 40, right: 40, textAlign: "center", zIndex: 3 }}>
+      {/* CTA 3 lignes — centré milieu écran */}
+      <div style={{
+        position: "absolute", top: 0, bottom: 0, left: 0, right: 0,
+        display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+        textAlign: "center", zIndex: 3,
+        paddingTop: 180,
+      }}>
         <div style={{ opacity: l1Op, transform: `translateY(${l1Y}px)` }}>
-          <div style={{ fontSize: 66, fontFamily: "Georgia, serif", fontStyle: "italic", color: WHITE, lineHeight: 1.1, textShadow: "0 3px 30px rgba(0,0,0,0.97)" }}>
+          <div style={{ fontSize: 96, fontFamily: "Georgia, serif", fontStyle: "italic", color: WHITE, lineHeight: 1.0, textShadow: "0 4px 40px rgba(0,0,0,0.97)" }}>
             Viens vite
           </div>
         </div>
         <div style={{ opacity: l2Op, transform: `translateY(${l2Y}px)` }}>
-          <div style={{ fontSize: 58, fontFamily: "Georgia, serif", fontStyle: "italic", color: CLAY, lineHeight: 1.1, textShadow: `0 0 60px rgba(196,64,16,0.8), 0 3px 30px rgba(0,0,0,0.97)` }}>
-            reserver ta place
+          <div style={{ fontSize: 80, fontFamily: "Georgia, serif", fontStyle: "italic", color: CLAY, lineHeight: 1.05, textShadow: `0 0 80px rgba(196,64,16,0.9), 0 4px 40px rgba(0,0,0,0.97)` }}>
+            reserver
+          </div>
+          <div style={{ fontSize: 80, fontFamily: "Georgia, serif", fontStyle: "italic", color: CLAY, lineHeight: 1.05, textShadow: `0 0 80px rgba(196,64,16,0.9), 0 4px 40px rgba(0,0,0,0.97)` }}>
+            ta place
           </div>
         </div>
-        <div style={{ opacity: l3Op, transform: `translateY(${l3Y}px)`, marginTop: 10 }}>
-          <div style={{ fontSize: 40, fontFamily: "Georgia, serif", color: SILVER, letterSpacing: 2, fontStyle: "italic", textShadow: "0 2px 20px rgba(0,0,0,0.97)" }}>
+        <div style={{ opacity: l3Op, transform: `translateY(${l3Y}px)`, marginTop: 16 }}>
+          <div style={{ fontSize: 46, fontFamily: "Georgia, serif", color: SILVER, letterSpacing: 3, fontStyle: "italic", textShadow: "0 2px 20px rgba(0,0,0,0.97)" }}>
             sans acompte
           </div>
         </div>
