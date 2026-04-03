@@ -1,4 +1,4 @@
-// WorldCupTikTok.jsx — v1 Coupe du Monde 2026
+// WorldCupTikTok.jsx — v2 clean
 // Format: 1080x1920 (TikTok 9:16) — 10s (300 frames @ 30fps)
 
 import {
@@ -12,228 +12,238 @@ import {
 } from "remotion";
 
 const NAVY    = "#050A1A";
-const BLUE    = "#081430";
+const BLUE    = "#081228";
 const GOLD    = "#D4A82F";
 const GOLD_LT = "#F0C84F";
 const WHITE   = "#FFFFFF";
 const SILVER  = "#B8C8D8";
-const RED     = "#CC2200";
 
-// ─── Scene 1 : Ballon + impact titre (0-90f) ─────────────────────────────────
-const SceneBall = () => {
+// ─── Scene 1 : Titre + ballon coin bas-droit (0-95f) ─────────────────────────
+const SceneOpening = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const ballSc  = spring({ frame: frame - 0,  fps, config: { damping: 12, stiffness: 70 } });
-  const ballY   = interpolate(ballSc, [0, 1], [600, 0]);
-  const ballRot = interpolate(frame, [0, 300], [0, 360]);
-  const bgOp    = interpolate(frame, [0, 20],  [0, 1], { extrapolateRight: "clamp" });
+  const bgOp   = interpolate(frame, [0, 18], [0, 1], { extrapolateRight: "clamp" });
 
-  const fifaOp  = interpolate(frame, [28, 44], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const fifaY   = interpolate(frame, [28, 44], [30, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // Titres
+  const fifaOp = interpolate(frame, [8, 24], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const fifaY  = interpolate(frame, [8, 24], [-30, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const wcSc    = spring({ frame: frame - 40, fps, config: { damping: 10, stiffness: 160 } });
-  const wcOp    = interpolate(frame, [38, 52], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const wcSc   = spring({ frame: frame - 20, fps, config: { damping: 11, stiffness: 140 } });
+  const wcOp   = interpolate(frame, [18, 34], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const yearSc  = spring({ frame: frame - 55, fps, config: { damping: 10, stiffness: 180 } });
-  const yearOp  = interpolate(frame, [53, 66], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const yearSc = spring({ frame: frame - 36, fps, config: { damping: 9, stiffness: 180 } });
+  const yearOp = interpolate(frame, [34, 50], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const lineW   = interpolate(frame, [62, 82], [0, 340], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const lineW  = interpolate(frame, [52, 76], [0, 360], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const subOp  = interpolate(frame, [60, 74], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  // Particules dorées
-  const particles = Array.from({ length: 20 }, (_, i) => ({
-    x: (i * 57 + 11) % 100, y: (i * 41 + 7) % 100,
+  // Ballon — arrive de droite vers coin bas-droit
+  const ballSc = spring({ frame: frame - 38, fps, config: { damping: 14, stiffness: 80 } });
+  const ballX  = interpolate(ballSc, [0, 1], [600, 0]);
+  const ballRot = interpolate(frame, [38, 95], [25, -8]);
+
+  // Particules
+  const pts = Array.from({ length: 18 }, (_, i) => ({
+    x: (i * 57 + 11) % 100, y: (i * 43 + 7) % 100,
     size: 1.5 + (i % 3), delay: i * 3,
   }));
 
   return (
-    <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 80% at 50% 60%, #1a1000 0%, ${NAVY} 70%)`, overflow: "hidden", opacity: bgOp }}>
+    <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 70% at 50% 70%, #0f1828 0%, ${NAVY} 65%)`, opacity: bgOp, overflow: "hidden" }}>
 
-      {/* Lueur dorée centrale */}
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 65% 55% at 50% 62%, rgba(212,168,47,0.22) 0%, transparent 65%)" }} />
+      {/* Glow doré bas */}
+      <div style={{ position: "absolute", bottom: -100, left: "50%", transform: "translateX(-50%)", width: 900, height: 600, background: "radial-gradient(ellipse at 50% 80%, rgba(212,168,47,0.18) 0%, transparent 65%)", filter: "blur(20px)" }} />
 
       {/* Particules */}
-      {particles.map((p, i) => {
-        const pOp = interpolate(frame - p.delay, [0, 10, 70, 90], [0, 0.7, 0.7, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-        return <div key={i} style={{ position: "absolute", left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size, borderRadius: "50%", background: GOLD, opacity: pOp, boxShadow: `0 0 6px ${GOLD}`, zIndex: 1 }} />;
+      {pts.map((p, i) => {
+        const pOp = interpolate(frame - p.delay, [0, 10, 80, 95], [0, 0.6, 0.6, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+        return <div key={i} style={{ position: "absolute", left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size, borderRadius: "50%", background: GOLD, opacity: pOp, boxShadow: `0 0 5px ${GOLD}` }} />;
       })}
 
-      {/* Ballon FIFA */}
-      <div style={{
-        position: "absolute",
-        bottom: 160,
-        left: "50%",
-        transform: `translateX(-50%) translateY(${ballY}px) rotate(${ballRot}deg)`,
-        width: 780, height: 780,
-        zIndex: 2,
-      }}>
-        <img
-          src={staticFile("IMG_4489.jpeg")}
-          style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "50%", filter: "drop-shadow(0 0 80px rgba(212,168,47,0.4)) drop-shadow(0 40px 120px rgba(0,0,0,0.98))" }}
-        />
-      </div>
-
-      {/* Fondu bas ballon */}
-      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 400, background: `linear-gradient(0deg, ${NAVY} 0%, rgba(5,10,26,0.7) 50%, transparent 100%)`, zIndex: 3 }} />
-
       {/* FIFA */}
-      <div style={{ position: "absolute", top: 130, left: 0, right: 0, textAlign: "center", zIndex: 4, opacity: fifaOp, transform: `translateY(${fifaY}px)` }}>
-        <div style={{ fontSize: 24, color: GOLD, letterSpacing: 16, fontFamily: "Georgia, serif", fontWeight: "bold" }}>FIFA</div>
+      <div style={{ position: "absolute", top: 130, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: fifaOp, transform: `translateY(${fifaY}px)` }}>
+        <div style={{ fontSize: 22, color: GOLD, letterSpacing: 18, fontFamily: "Georgia, serif", fontWeight: "bold" }}>FIFA</div>
       </div>
 
       {/* WORLD CUP */}
-      <div style={{ position: "absolute", top: 170, left: 0, right: 0, textAlign: "center", zIndex: 4, opacity: wcOp, transform: `scale(${interpolate(wcSc, [0, 1], [0.6, 1])})` }}>
-        <div style={{ fontSize: 112, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.88, letterSpacing: -2, textShadow: "0 6px 60px rgba(0,0,0,0.98)" }}>
+      <div style={{ position: "absolute", top: 166, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: wcOp, transform: `scale(${interpolate(wcSc, [0, 1], [0.62, 1])})` }}>
+        <div style={{ fontSize: 128, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.86, letterSpacing: -3, textShadow: "0 6px 60px rgba(0,0,0,0.98), 0 0 40px rgba(0,0,0,0.8)" }}>
           WORLD
         </div>
-        <div style={{ fontSize: 112, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.88, letterSpacing: -2, textShadow: "0 6px 60px rgba(0,0,0,0.98)" }}>
+        <div style={{ fontSize: 128, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.86, letterSpacing: -3, textShadow: "0 6px 60px rgba(0,0,0,0.98)" }}>
           CUP
         </div>
       </div>
 
       {/* 2026 */}
-      <div style={{ position: "absolute", top: 414, left: 0, right: 0, textAlign: "center", zIndex: 4, opacity: yearOp, transform: `scale(${interpolate(yearSc, [0, 1], [0.5, 1])})` }}>
-        <div style={{ fontSize: 148, fontFamily: "Georgia, serif", fontWeight: "bold", color: GOLD, lineHeight: 0.9, letterSpacing: 4, textShadow: `0 0 120px rgba(212,168,47,1), 0 6px 60px rgba(0,0,0,0.98)` }}>
+      <div style={{ position: "absolute", top: 434, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: yearOp, transform: `scale(${interpolate(yearSc, [0, 1], [0.5, 1])})` }}>
+        <div style={{ fontSize: 168, fontFamily: "Georgia, serif", fontWeight: "bold", color: GOLD, lineHeight: 0.88, letterSpacing: 8, textShadow: `0 0 140px rgba(212,168,47,1), 0 0 60px rgba(212,168,47,0.7), 0 6px 60px rgba(0,0,0,0.98)` }}>
           2026
         </div>
       </div>
 
       {/* Ligne or */}
-      <div style={{ position: "absolute", top: 578, left: "50%", transform: "translateX(-50%)", width: lineW, height: 2, background: `linear-gradient(90deg, transparent, ${GOLD_LT}, transparent)`, zIndex: 4 }} />
+      <div style={{ position: "absolute", top: 620, left: "50%", transform: "translateX(-50%)", width: lineW, height: 2, background: `linear-gradient(90deg, transparent, ${GOLD_LT}, transparent)`, zIndex: 3 }} />
 
+      {/* Sous-titre */}
+      <div style={{ position: "absolute", top: 636, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: subOp }}>
+        <div style={{ fontSize: 20, color: SILVER, letterSpacing: 7, fontFamily: "Georgia, serif", fontStyle: "italic" }}>
+          USA · CANADA · MEXIQUE
+        </div>
+      </div>
+
+      {/* Ballon — coin bas-droit, arrive de droite */}
+      <div style={{
+        position: "absolute",
+        bottom: -80, right: -120,
+        width: 620, height: 620,
+        transform: `translateX(${ballX}px) rotate(${ballRot}deg)`,
+        zIndex: 2,
+        mixBlendMode: "screen",
+      }}>
+        <img
+          src={staticFile("IMG_4489.jpeg")}
+          style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 0 50px rgba(212,168,47,0.35))" }}
+        />
+      </div>
     </AbsoluteFill>
   );
 };
 
-// ─── Scene 2 : Trophée (80-185f) ─────────────────────────────────────────────
+// ─── Scene 2 : Trophée stylé (82-185f) ───────────────────────────────────────
 const SceneTrophee = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const bgOp   = interpolate(frame, [0, 16], [0, 1], { extrapolateRight: "clamp" });
-  const zoom   = interpolate(frame, [0, 105], [1.0, 1.14], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const bgOp  = interpolate(frame, [0, 16], [0, 1], { extrapolateRight: "clamp" });
 
-  const tropSc = spring({ frame: frame - 4, fps, config: { damping: 13, stiffness: 85 } });
-  const tropY  = interpolate(tropSc, [0, 1], [500, 0]);
-  const tropOp = interpolate(frame, [2, 22], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // Flash doré à l'entrée
+  const flashOp = interpolate(frame, [4, 18], [0.7, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const logoSc = spring({ frame: frame - 30, fps, config: { damping: 10, stiffness: 130 } });
-  const logoOp = interpolate(frame, [28, 44], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // Trophée monte du bas avec overshoot
+  const tropSc = spring({ frame: frame - 6, fps, config: { damping: 13, stiffness: 90 } });
+  const tropY  = interpolate(tropSc, [0, 1], [420, 0]);
+  const tropOp = interpolate(frame, [4, 22], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const t1Op   = interpolate(frame, [44, 58], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const t1Y    = interpolate(frame, [44, 58], [24, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const t2Op   = interpolate(frame, [56, 70], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const t2Y    = interpolate(frame, [56, 70], [24, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // Logo WE ARE 26
+  const logoSc = spring({ frame: frame - 32, fps, config: { damping: 11, stiffness: 120 } });
+  const logoOp = interpolate(frame, [30, 46], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const rays = Array.from({ length: 8 }, (_, i) => i * 45);
+  // Textes bas
+  const t1Op = interpolate(frame, [46, 60], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const t1Y  = interpolate(frame, [46, 60], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const t2Op = interpolate(frame, [58, 72], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const t2Y  = interpolate(frame, [58, 72], [20, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // Rayons
+  const raysOp = interpolate(frame, [6, 30], [0, 0.14], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
   return (
-    <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 80% at 50% 55%, #1a1200 0%, ${NAVY} 65%)`, opacity: bgOp, overflow: "hidden" }}>
+    <AbsoluteFill style={{ background: `radial-gradient(ellipse 100% 80% at 50% 60%, #120e00 0%, ${NAVY} 60%)`, opacity: bgOp, overflow: "hidden" }}>
 
-      {/* Rayons dorés depuis le trophée */}
-      {rays.map((angle, i) => {
-        const rOp = interpolate(frame, [10, 28], [0, 0.12], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-        return (
-          <div key={i} style={{
-            position: "absolute", top: "50%", left: "50%",
-            width: 3, height: 700,
-            background: `linear-gradient(0deg, ${GOLD}, transparent)`,
-            transform: `translate(-50%, -100%) rotate(${angle}deg)`,
-            transformOrigin: "bottom center",
-            opacity: rOp,
-          }} />
-        );
-      })}
+      {/* Flash à l'entrée */}
+      <div style={{ position: "absolute", inset: 0, background: `radial-gradient(ellipse 60% 50% at 50% 45%, rgba(212,168,47,0.9) 0%, transparent 70%)`, opacity: flashOp, zIndex: 5 }} />
+
+      {/* Rayons depuis le centre */}
+      {Array.from({ length: 10 }, (_, i) => (
+        <div key={i} style={{
+          position: "absolute", top: "44%", left: "50%",
+          width: 2, height: 750,
+          background: `linear-gradient(0deg, ${GOLD}, transparent)`,
+          transform: `translate(-50%, -100%) rotate(${i * 36}deg)`,
+          transformOrigin: "bottom center",
+          opacity: raysOp,
+        }} />
+      ))}
 
       {/* Lueur dorée */}
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 50% at 50% 52%, rgba(212,168,47,0.28) 0%, transparent 65%)", transform: `scale(${zoom})` }} />
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 50% at 50% 48%, rgba(212,168,47,0.30) 0%, transparent 60%)" }} />
 
-      {/* Trophée */}
+      {/* Trophée — centré, grand */}
       <div style={{
         position: "absolute",
-        bottom: 120, left: "50%",
+        bottom: 90, left: "50%",
         transform: `translateX(-50%) translateY(${tropY}px)`,
-        width: 700, height: 900,
+        width: 680, height: 900,
         opacity: tropOp, zIndex: 2,
+        mixBlendMode: "screen",
       }}>
         <img
           src={staticFile("IMG_4488.jpeg")}
           style={{
             width: "100%", height: "100%",
             objectFit: "contain", objectPosition: "center bottom",
-            filter: "drop-shadow(0 0 100px rgba(212,168,47,0.55)) drop-shadow(0 50px 120px rgba(0,0,0,0.98))",
+            filter: "drop-shadow(0 0 120px rgba(212,168,47,0.7)) brightness(1.1)",
           }}
         />
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "18%", background: `linear-gradient(0deg, ${NAVY} 0%, transparent 100%)` }} />
       </div>
 
-      {/* Logo WE ARE 26 */}
-      <div style={{ position: "absolute", top: 110, left: 0, right: 0, textAlign: "center", zIndex: 4, opacity: logoOp, transform: `scale(${interpolate(logoSc, [0, 1], [0.6, 1])})` }}>
+      {/* Logo WE ARE 26 — haut centré */}
+      <div style={{ position: "absolute", top: 100, left: 0, right: 0, textAlign: "center", zIndex: 4, opacity: logoOp, transform: `scale(${interpolate(logoSc, [0, 1], [0.65, 1])})` }}>
         <img
           src={staticFile("IMG_4490_cutout.png")}
-          style={{ width: 420, height: 220, objectFit: "contain", filter: "invert(1) drop-shadow(0 0 30px rgba(212,168,47,0.5))" }}
+          style={{ width: 380, objectFit: "contain", filter: "invert(1) drop-shadow(0 0 28px rgba(212,168,47,0.55))" }}
         />
       </div>
 
-      {/* Texte bas */}
+      {/* Bas : textes */}
       <div style={{ position: "absolute", bottom: 80, left: 0, right: 0, textAlign: "center", zIndex: 4 }}>
         <div style={{ opacity: t1Op, transform: `translateY(${t1Y}px)` }}>
-          <div style={{ fontSize: 34, color: GOLD, fontFamily: "Georgia, serif", letterSpacing: 8, fontWeight: "bold" }}>LA COUPE DU MONDE</div>
+          <div style={{ fontSize: 36, color: GOLD, fontFamily: "Georgia, serif", letterSpacing: 7, fontWeight: "bold" }}>LA COUPE DU MONDE</div>
         </div>
         <div style={{ opacity: t2Op, transform: `translateY(${t2Y}px)`, marginTop: 6 }}>
-          <div style={{ fontSize: 22, color: SILVER, fontFamily: "Georgia, serif", letterSpacing: 6, fontStyle: "italic" }}>USA · CANADA · MEXIQUE</div>
+          <div style={{ fontSize: 20, color: SILVER, fontFamily: "Georgia, serif", letterSpacing: 5, fontStyle: "italic" }}>USA · CANADA · MEXIQUE</div>
         </div>
       </div>
-
     </AbsoluteFill>
   );
 };
 
-// ─── Scene 3 : Billets Excellis (175-300f) ────────────────────────────────────
+// ─── Scene 3 : CTA Excellis (175-300f) ───────────────────────────────────────
 const SceneCTA = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
   const bgOp    = interpolate(frame, [0, 14], [0, 1], { extrapolateRight: "clamp" });
-  const logoSc  = spring({ frame: frame - 6,  fps, config: { damping: 13, stiffness: 100 } });
-  const logoOp  = interpolate(frame, [4, 18],  [0, 1], { extrapolateRight: "clamp" });
+  const logoSc  = spring({ frame: frame - 5,  fps, config: { damping: 13, stiffness: 100 } });
+  const logoOp  = interpolate(frame, [3, 18],  [0, 1], { extrapolateRight: "clamp" });
 
-  const b1Sc    = spring({ frame: frame - 22, fps, config: { damping: 10, stiffness: 160 } });
-  const b1Op    = interpolate(frame, [20, 34], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const b2Sc    = spring({ frame: frame - 34, fps, config: { damping: 10, stiffness: 160 } });
-  const b2Op    = interpolate(frame, [32, 46], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // Badges billets + hôtel
+  const b1Sc   = spring({ frame: frame - 22, fps, config: { damping: 10, stiffness: 150 } });
+  const b1Op   = interpolate(frame, [20, 34], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const b2Sc   = spring({ frame: frame - 32, fps, config: { damping: 10, stiffness: 150 } });
+  const b2Op   = interpolate(frame, [30, 44], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const l1Op    = interpolate(frame, [48, 62], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const l1Y     = interpolate(frame, [48, 62], [22, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const l2Op    = interpolate(frame, [60, 74], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const l2Y     = interpolate(frame, [60, 74], [22, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const l3Op    = interpolate(frame, [72, 86], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const l3Y     = interpolate(frame, [72, 86], [22, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const badgeOp = interpolate(frame, [88, 100], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  // CTA texte
+  const l1Op   = interpolate(frame, [46, 60], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const l1Y    = interpolate(frame, [46, 60], [24, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const l2Op   = interpolate(frame, [57, 71], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const l2Y    = interpolate(frame, [57, 71], [24, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const l3Op   = interpolate(frame, [68, 82], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const l3Y    = interpolate(frame, [68, 82], [24, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const ctaOp  = interpolate(frame, [90, 104], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const ctaY   = interpolate(frame, [90, 104], [18, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const shimmerX = interpolate(frame, [28, 72], [-150, 380], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const shimmerX = interpolate(frame, [22, 65], [-160, 400], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
 
-  const particles = Array.from({ length: 16 }, (_, i) => ({
+  const pts = Array.from({ length: 14 }, (_, i) => ({
     x: (i * 67 + 13) % 100, y: (i * 43 + 7) % 100, delay: i * 3,
-    color: i % 3 === 0 ? GOLD : i % 3 === 1 ? RED : WHITE,
   }));
 
   return (
-    <AbsoluteFill style={{
-      background: `radial-gradient(ellipse 90% 90% at 50% 50%, ${BLUE} 0%, ${NAVY} 100%)`,
-      opacity: bgOp, overflow: "hidden",
-    }}>
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 45% at 50% 38%, rgba(212,168,47,0.16) 0%, transparent 65%)" }} />
+    <AbsoluteFill style={{ background: `radial-gradient(ellipse 95% 95% at 50% 50%, ${BLUE} 0%, ${NAVY} 100%)`, opacity: bgOp, overflow: "hidden" }}>
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 42% at 50% 36%, rgba(212,168,47,0.16) 0%, transparent 65%)" }} />
 
       {/* Particules */}
-      {particles.map((p, i) => {
-        const pOp = interpolate(frame - p.delay, [0, 8, 100, 115], [0, 0.65, 0.65, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-        return <div key={i} style={{ position: "absolute", left: `${p.x}%`, top: `${p.y}%`, width: 2 + (i % 3), height: 2 + (i % 3), borderRadius: "50%", background: p.color, opacity: pOp, boxShadow: `0 0 8px ${p.color}`, zIndex: 1 }} />;
+      {pts.map((p, i) => {
+        const pOp = interpolate(frame - p.delay, [0, 8, 110, 125], [0, 0.55, 0.55, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+        return <div key={i} style={{ position: "absolute", left: `${p.x}%`, top: `${p.y}%`, width: 2 + (i % 3), height: 2 + (i % 3), borderRadius: "50%", background: GOLD, opacity: pOp, boxShadow: `0 0 7px ${GOLD}` }} />;
       })}
 
       {/* Logo Excellis */}
       <div style={{
-        position: "absolute", top: 130, left: 0, right: 0,
+        position: "absolute", top: 120, left: 0, right: 0,
         display: "flex", flexDirection: "column", alignItems: "center", gap: 10,
         opacity: logoOp, transform: `scale(${interpolate(logoSc, [0, 1], [0.65, 1])})`, zIndex: 3,
       }}>
@@ -247,59 +257,61 @@ const SceneCTA = () => {
         <div style={{ fontSize: 62, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: 9, fontWeight: "bold", textShadow: "0 4px 30px rgba(0,0,0,0.97)" }}>EXCELLIS</div>
         <div style={{ fontSize: 13, color: GOLD, letterSpacing: 9, fontFamily: "Georgia, serif" }}>C O N C I E R G E R I E</div>
         <div style={{ position: "relative", width: 300, height: 1.5, background: GOLD, overflow: "hidden" }}>
-          <div style={{ position: "absolute", left: shimmerX, top: 0, bottom: 0, width: 110, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.92), transparent)" }} />
+          <div style={{ position: "absolute", left: shimmerX, top: 0, bottom: 0, width: 110, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent)" }} />
         </div>
       </div>
 
-      {/* Badges BILLETS / CATÉGORIES */}
-      <div style={{ position: "absolute", top: 400, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 20, zIndex: 3 }}>
-        <div style={{ opacity: b1Op, transform: `scale(${interpolate(b1Sc, [0, 1], [0.7, 1])})` }}>
-          <div style={{ padding: "12px 28px", background: "rgba(212,168,47,0.12)", border: `1.5px solid ${GOLD}88`, borderRadius: 12, textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: GOLD, letterSpacing: 4 }}>TOUTES</div>
-            <div style={{ fontSize: 22, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold" }}>CATEGORIES</div>
+      {/* Séparateur */}
+      <div style={{ position: "absolute", top: 378, left: "50%", transform: "translateX(-50%)", width: interpolate(frame, [20, 40], [0, 260], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), height: 1, background: `linear-gradient(90deg, transparent, rgba(212,168,47,0.4), transparent)`, zIndex: 3 }} />
+
+      {/* Badges — billets + hôtel */}
+      <div style={{ position: "absolute", top: 398, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 18, zIndex: 3 }}>
+        <div style={{ opacity: b1Op, transform: `scale(${interpolate(b1Sc, [0, 1], [0.72, 1])})` }}>
+          <div style={{ padding: "14px 24px", background: "rgba(212,168,47,0.10)", border: `1.5px solid rgba(212,168,47,0.55)`, borderRadius: 14, textAlign: "center", minWidth: 148 }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🎟️</div>
+            <div style={{ fontSize: 11, color: GOLD, letterSpacing: 4, marginBottom: 2 }}>TOUTES</div>
+            <div style={{ fontSize: 20, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 1 }}>CATEGORIES</div>
           </div>
         </div>
-        <div style={{ opacity: b2Op, transform: `scale(${interpolate(b2Sc, [0, 1], [0.7, 1])})` }}>
-          <div style={{ padding: "12px 28px", background: "rgba(212,168,47,0.12)", border: `1.5px solid ${GOLD}88`, borderRadius: 12, textAlign: "center" }}>
-            <div style={{ fontSize: 11, color: GOLD, letterSpacing: 4 }}>TOUS LES</div>
-            <div style={{ fontSize: 22, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold" }}>MATCHS</div>
+        <div style={{ opacity: b2Op, transform: `scale(${interpolate(b2Sc, [0, 1], [0.72, 1])})` }}>
+          <div style={{ padding: "14px 24px", background: "rgba(212,168,47,0.10)", border: `1.5px solid rgba(212,168,47,0.55)`, borderRadius: 14, textAlign: "center", minWidth: 148 }}>
+            <div style={{ fontSize: 24, marginBottom: 4 }}>🏨</div>
+            <div style={{ fontSize: 11, color: GOLD, letterSpacing: 4, marginBottom: 2 }}>PACK</div>
+            <div style={{ fontSize: 20, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 1 }}>HOTEL</div>
           </div>
         </div>
       </div>
 
-      {/* CTA centré */}
+      {/* CTA centré milieu-bas */}
       <div style={{
-        position: "absolute", top: 550, bottom: 120, left: 0, right: 0,
+        position: "absolute", top: 600, bottom: 110, left: 0, right: 0,
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
         textAlign: "center", zIndex: 3,
       }}>
         <div style={{ opacity: l1Op, transform: `translateY(${l1Y}px)` }}>
-          <div style={{ fontSize: 92, fontFamily: "Georgia, serif", fontStyle: "italic", color: WHITE, lineHeight: 1.0, textShadow: "0 4px 40px rgba(0,0,0,0.97)" }}>
+          <div style={{ fontSize: 92, fontFamily: "Georgia, serif", fontStyle: "italic", color: WHITE, lineHeight: 1.0, textShadow: "0 4px 40px rgba(0,0,0,0.98)" }}>
             Viens vite
           </div>
         </div>
         <div style={{ opacity: l2Op, transform: `translateY(${l2Y}px)` }}>
-          <div style={{ fontSize: 80, fontFamily: "Georgia, serif", fontStyle: "italic", color: GOLD, lineHeight: 1.0, textShadow: `0 0 80px rgba(212,168,47,0.9), 0 4px 40px rgba(0,0,0,0.97)` }}>
+          <div style={{ fontSize: 80, fontFamily: "Georgia, serif", fontStyle: "italic", color: GOLD, lineHeight: 1.0, textShadow: `0 0 90px rgba(212,168,47,0.9), 0 4px 40px rgba(0,0,0,0.98)` }}>
             reserver
           </div>
-          <div style={{ fontSize: 80, fontFamily: "Georgia, serif", fontStyle: "italic", color: GOLD, lineHeight: 1.0, textShadow: `0 0 80px rgba(212,168,47,0.9), 0 4px 40px rgba(0,0,0,0.97)` }}>
+          <div style={{ fontSize: 80, fontFamily: "Georgia, serif", fontStyle: "italic", color: GOLD, lineHeight: 1.0, textShadow: `0 0 90px rgba(212,168,47,0.9), 0 4px 40px rgba(0,0,0,0.98)` }}>
             ta place
           </div>
         </div>
         <div style={{ opacity: l3Op, transform: `translateY(${l3Y}px)`, marginTop: 12 }}>
-          <div style={{ fontSize: 42, fontFamily: "Georgia, serif", color: SILVER, letterSpacing: 3, fontStyle: "italic" }}>
+          <div style={{ fontSize: 40, fontFamily: "Georgia, serif", color: SILVER, letterSpacing: 3, fontStyle: "italic" }}>
             sans acompte
           </div>
         </div>
       </div>
 
-      {/* Badge bas */}
-      <div style={{
-        position: "absolute", bottom: 90, left: 0, right: 0, textAlign: "center", zIndex: 3,
-        opacity: badgeOp,
-      }}>
-        <div style={{ display: "inline-block", padding: "14px 48px", background: "rgba(212,168,47,0.12)", border: `1.5px solid ${GOLD}88`, borderRadius: 50 }}>
-          <div style={{ fontSize: 22, color: GOLD, fontFamily: "Georgia, serif", letterSpacing: 4, fontWeight: "bold" }}>Contactez-nous</div>
+      {/* Bouton bas */}
+      <div style={{ position: "absolute", bottom: 80, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: ctaOp, transform: `translateY(${ctaY}px)` }}>
+        <div style={{ display: "inline-block", padding: "14px 52px", background: "linear-gradient(135deg, rgba(212,168,47,0.18), rgba(212,168,47,0.06))", border: `1.5px solid rgba(212,168,47,0.7)`, borderRadius: 50 }}>
+          <div style={{ fontSize: 22, color: GOLD, fontFamily: "Georgia, serif", letterSpacing: 5, fontWeight: "bold" }}>Contactez-nous</div>
         </div>
       </div>
     </AbsoluteFill>
@@ -309,8 +321,8 @@ const SceneCTA = () => {
 // ─── Composition ─────────────────────────────────────────────────────────────
 export const WorldCupTikTok = () => (
   <AbsoluteFill>
-    <Sequence from={0}   durationInFrames={100}><SceneBall /></Sequence>
-    <Sequence from={84}  durationInFrames={110}><SceneTrophee /></Sequence>
+    <Sequence from={0}   durationInFrames={97}><SceneOpening /></Sequence>
+    <Sequence from={82}  durationInFrames={105}><SceneTrophee /></Sequence>
     <Sequence from={178} durationInFrames={122}><SceneCTA /></Sequence>
   </AbsoluteFill>
 );
