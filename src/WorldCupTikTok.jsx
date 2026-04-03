@@ -67,28 +67,28 @@ const SceneOpening = () => {
       </div>
 
       {/* WORLD CUP */}
-      <div style={{ position: "absolute", top: 166, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: wcOp, transform: `scale(${interpolate(wcSc, [0, 1], [0.62, 1])})` }}>
-        <div style={{ fontSize: 128, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.86, letterSpacing: -3, textShadow: "0 6px 60px rgba(0,0,0,0.98), 0 0 40px rgba(0,0,0,0.8)" }}>
+      <div style={{ position: "absolute", top: 148, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: wcOp, transform: `scale(${interpolate(wcSc, [0, 1], [0.62, 1])})` }}>
+        <div style={{ fontSize: 176, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.84, letterSpacing: -4, textShadow: "0 6px 70px rgba(0,0,0,0.98)" }}>
           WORLD
         </div>
-        <div style={{ fontSize: 128, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.86, letterSpacing: -3, textShadow: "0 6px 60px rgba(0,0,0,0.98)" }}>
+        <div style={{ fontSize: 176, fontFamily: "Georgia, serif", fontWeight: "bold", color: WHITE, lineHeight: 0.84, letterSpacing: -4, textShadow: "0 6px 70px rgba(0,0,0,0.98)" }}>
           CUP
         </div>
       </div>
 
       {/* 2026 */}
-      <div style={{ position: "absolute", top: 434, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: yearOp, transform: `scale(${interpolate(yearSc, [0, 1], [0.5, 1])})` }}>
-        <div style={{ fontSize: 168, fontFamily: "Georgia, serif", fontWeight: "bold", color: GOLD, lineHeight: 0.88, letterSpacing: 8, textShadow: `0 0 140px rgba(212,168,47,1), 0 0 60px rgba(212,168,47,0.7), 0 6px 60px rgba(0,0,0,0.98)` }}>
+      <div style={{ position: "absolute", top: 500, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: yearOp, transform: `scale(${interpolate(yearSc, [0, 1], [0.5, 1])})` }}>
+        <div style={{ fontSize: 230, fontFamily: "Georgia, serif", fontWeight: "bold", color: GOLD, lineHeight: 0.85, letterSpacing: 6, textShadow: `0 0 180px rgba(212,168,47,1), 0 0 80px rgba(212,168,47,0.8), 0 8px 60px rgba(0,0,0,0.98)` }}>
           2026
         </div>
       </div>
 
       {/* Ligne or */}
-      <div style={{ position: "absolute", top: 620, left: "50%", transform: "translateX(-50%)", width: lineW, height: 2, background: `linear-gradient(90deg, transparent, ${GOLD_LT}, transparent)`, zIndex: 3 }} />
+      <div style={{ position: "absolute", top: 742, left: "50%", transform: "translateX(-50%)", width: lineW, height: 2, background: `linear-gradient(90deg, transparent, ${GOLD_LT}, transparent)`, zIndex: 3 }} />
 
       {/* Sous-titre */}
-      <div style={{ position: "absolute", top: 636, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: subOp }}>
-        <div style={{ fontSize: 20, color: SILVER, letterSpacing: 7, fontFamily: "Georgia, serif", fontStyle: "italic" }}>
+      <div style={{ position: "absolute", top: 758, left: 0, right: 0, textAlign: "center", zIndex: 3, opacity: subOp }}>
+        <div style={{ fontSize: 28, color: SILVER, letterSpacing: 7, fontFamily: "Georgia, serif", fontStyle: "italic" }}>
           USA · CANADA · MEXIQUE
         </div>
       </div>
@@ -96,15 +96,14 @@ const SceneOpening = () => {
       {/* Ballon — coin bas-droit, arrive de droite */}
       <div style={{
         position: "absolute",
-        bottom: -80, right: -120,
-        width: 620, height: 620,
+        bottom: -60, right: -100,
+        width: 680, height: 680,
         transform: `translateX(${ballX}px) rotate(${ballRot}deg)`,
         zIndex: 2,
-        mixBlendMode: "screen",
       }}>
         <img
-          src={staticFile("IMG_4489.jpeg")}
-          style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 0 50px rgba(212,168,47,0.35))" }}
+          src={staticFile("IMG_4489_cutout.png")}
+          style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 0 60px rgba(100,140,255,0.5)) drop-shadow(0 20px 80px rgba(0,0,0,0.95))" }}
         />
       </div>
     </AbsoluteFill>
@@ -165,16 +164,15 @@ const SceneTrophee = () => {
         position: "absolute",
         bottom: 90, left: "50%",
         transform: `translateX(-50%) translateY(${tropY}px)`,
-        width: 680, height: 900,
+        width: 720, height: 960,
         opacity: tropOp, zIndex: 2,
-        mixBlendMode: "screen",
       }}>
         <img
-          src={staticFile("IMG_4488.jpeg")}
+          src={staticFile("IMG_4488_cutout.png")}
           style={{
             width: "100%", height: "100%",
             objectFit: "contain", objectPosition: "center bottom",
-            filter: "drop-shadow(0 0 120px rgba(212,168,47,0.7)) brightness(1.1)",
+            filter: "drop-shadow(0 0 140px rgba(212,168,47,0.85)) drop-shadow(0 0 60px rgba(212,168,47,0.5)) brightness(1.08)",
           }}
         />
       </div>
@@ -190,10 +188,10 @@ const SceneTrophee = () => {
       {/* Bas : textes */}
       <div style={{ position: "absolute", bottom: 80, left: 0, right: 0, textAlign: "center", zIndex: 4 }}>
         <div style={{ opacity: t1Op, transform: `translateY(${t1Y}px)` }}>
-          <div style={{ fontSize: 36, color: GOLD, fontFamily: "Georgia, serif", letterSpacing: 7, fontWeight: "bold" }}>LA COUPE DU MONDE</div>
+          <div style={{ fontSize: 48, color: GOLD, fontFamily: "Georgia, serif", letterSpacing: 6, fontWeight: "bold" }}>LA COUPE DU MONDE</div>
         </div>
-        <div style={{ opacity: t2Op, transform: `translateY(${t2Y}px)`, marginTop: 6 }}>
-          <div style={{ fontSize: 20, color: SILVER, fontFamily: "Georgia, serif", letterSpacing: 5, fontStyle: "italic" }}>USA · CANADA · MEXIQUE</div>
+        <div style={{ opacity: t2Op, transform: `translateY(${t2Y}px)`, marginTop: 8 }}>
+          <div style={{ fontSize: 28, color: SILVER, fontFamily: "Georgia, serif", letterSpacing: 5, fontStyle: "italic" }}>USA · CANADA · MEXIQUE</div>
         </div>
       </div>
     </AbsoluteFill>
@@ -254,8 +252,8 @@ const SceneCTA = () => {
           <circle cx="50" cy="8"  r="5" fill={GOLD_LT} />
           <circle cx="90" cy="18" r="5" fill={GOLD_LT} />
         </svg>
-        <div style={{ fontSize: 62, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: 9, fontWeight: "bold", textShadow: "0 4px 30px rgba(0,0,0,0.97)" }}>EXCELLIS</div>
-        <div style={{ fontSize: 13, color: GOLD, letterSpacing: 9, fontFamily: "Georgia, serif" }}>C O N C I E R G E R I E</div>
+        <div style={{ fontSize: 74, fontFamily: "Georgia, serif", color: WHITE, letterSpacing: 9, fontWeight: "bold", textShadow: "0 4px 30px rgba(0,0,0,0.97)" }}>EXCELLIS</div>
+        <div style={{ fontSize: 15, color: GOLD, letterSpacing: 9, fontFamily: "Georgia, serif" }}>C O N C I E R G E R I E</div>
         <div style={{ position: "relative", width: 300, height: 1.5, background: GOLD, overflow: "hidden" }}>
           <div style={{ position: "absolute", left: shimmerX, top: 0, bottom: 0, width: 110, background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent)" }} />
         </div>
@@ -269,15 +267,15 @@ const SceneCTA = () => {
         <div style={{ opacity: b1Op, transform: `scale(${interpolate(b1Sc, [0, 1], [0.72, 1])})` }}>
           <div style={{ padding: "14px 24px", background: "rgba(212,168,47,0.10)", border: `1.5px solid rgba(212,168,47,0.55)`, borderRadius: 14, textAlign: "center", minWidth: 148 }}>
             <div style={{ fontSize: 24, marginBottom: 4 }}>🎟️</div>
-            <div style={{ fontSize: 11, color: GOLD, letterSpacing: 4, marginBottom: 2 }}>TOUTES</div>
-            <div style={{ fontSize: 20, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 1 }}>CATEGORIES</div>
+            <div style={{ fontSize: 13, color: GOLD, letterSpacing: 4, marginBottom: 2 }}>TOUTES</div>
+            <div style={{ fontSize: 26, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 1 }}>CATEGORIES</div>
           </div>
         </div>
         <div style={{ opacity: b2Op, transform: `scale(${interpolate(b2Sc, [0, 1], [0.72, 1])})` }}>
           <div style={{ padding: "14px 24px", background: "rgba(212,168,47,0.10)", border: `1.5px solid rgba(212,168,47,0.55)`, borderRadius: 14, textAlign: "center", minWidth: 148 }}>
             <div style={{ fontSize: 24, marginBottom: 4 }}>🏨</div>
-            <div style={{ fontSize: 11, color: GOLD, letterSpacing: 4, marginBottom: 2 }}>PACK</div>
-            <div style={{ fontSize: 20, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 1 }}>HOTEL</div>
+            <div style={{ fontSize: 13, color: GOLD, letterSpacing: 4, marginBottom: 2 }}>PACK</div>
+            <div style={{ fontSize: 26, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 1 }}>HOTEL</div>
           </div>
         </div>
       </div>
@@ -289,20 +287,20 @@ const SceneCTA = () => {
         textAlign: "center", zIndex: 3,
       }}>
         <div style={{ opacity: l1Op, transform: `translateY(${l1Y}px)` }}>
-          <div style={{ fontSize: 92, fontFamily: "Georgia, serif", fontStyle: "italic", color: WHITE, lineHeight: 1.0, textShadow: "0 4px 40px rgba(0,0,0,0.98)" }}>
+          <div style={{ fontSize: 124, fontFamily: "Georgia, serif", fontStyle: "italic", color: WHITE, lineHeight: 0.95, textShadow: "0 4px 50px rgba(0,0,0,0.98)" }}>
             Viens vite
           </div>
         </div>
         <div style={{ opacity: l2Op, transform: `translateY(${l2Y}px)` }}>
-          <div style={{ fontSize: 80, fontFamily: "Georgia, serif", fontStyle: "italic", color: GOLD, lineHeight: 1.0, textShadow: `0 0 90px rgba(212,168,47,0.9), 0 4px 40px rgba(0,0,0,0.98)` }}>
+          <div style={{ fontSize: 108, fontFamily: "Georgia, serif", fontStyle: "italic", color: GOLD, lineHeight: 0.95, textShadow: `0 0 110px rgba(212,168,47,0.95), 0 4px 50px rgba(0,0,0,0.98)` }}>
             reserver
           </div>
-          <div style={{ fontSize: 80, fontFamily: "Georgia, serif", fontStyle: "italic", color: GOLD, lineHeight: 1.0, textShadow: `0 0 90px rgba(212,168,47,0.9), 0 4px 40px rgba(0,0,0,0.98)` }}>
+          <div style={{ fontSize: 108, fontFamily: "Georgia, serif", fontStyle: "italic", color: GOLD, lineHeight: 0.95, textShadow: `0 0 110px rgba(212,168,47,0.95), 0 4px 50px rgba(0,0,0,0.98)` }}>
             ta place
           </div>
         </div>
-        <div style={{ opacity: l3Op, transform: `translateY(${l3Y}px)`, marginTop: 12 }}>
-          <div style={{ fontSize: 40, fontFamily: "Georgia, serif", color: SILVER, letterSpacing: 3, fontStyle: "italic" }}>
+        <div style={{ opacity: l3Op, transform: `translateY(${l3Y}px)`, marginTop: 14 }}>
+          <div style={{ fontSize: 52, fontFamily: "Georgia, serif", color: SILVER, letterSpacing: 4, fontStyle: "italic" }}>
             sans acompte
           </div>
         </div>
