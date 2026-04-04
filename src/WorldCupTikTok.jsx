@@ -93,19 +93,6 @@ const SceneOpening = () => {
         </div>
       </div>
 
-      {/* Ballon — coin bas-droit, arrive de droite */}
-      <div style={{
-        position: "absolute",
-        bottom: -60, right: -100,
-        width: 680, height: 680,
-        transform: `translateX(${ballX}px) rotate(${ballRot}deg)`,
-        zIndex: 2,
-      }}>
-        <img
-          src={staticFile("IMG_4489_cutout.png")}
-          style={{ width: "100%", height: "100%", objectFit: "contain", filter: "drop-shadow(0 0 60px rgba(100,140,255,0.5)) drop-shadow(0 20px 80px rgba(0,0,0,0.95))" }}
-        />
-      </div>
     </AbsoluteFill>
   );
 };
@@ -159,12 +146,12 @@ const SceneTrophee = () => {
       {/* Lueur dorée */}
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 55% 50% at 50% 48%, rgba(212,168,47,0.30) 0%, transparent 60%)" }} />
 
-      {/* Trophée — centré, grand */}
+      {/* Trophée — centré parfaitement */}
       <div style={{
         position: "absolute",
-        bottom: 90, left: "50%",
-        transform: `translateX(-50%) translateY(${tropY}px)`,
-        width: 720, height: 960,
+        top: "50%", left: "50%",
+        transform: `translate(-50%, -50%) translateY(${tropY}px)`,
+        width: 820, height: 1060,
         opacity: tropOp, zIndex: 2,
       }}>
         <img
@@ -262,20 +249,20 @@ const SceneCTA = () => {
       {/* Séparateur */}
       <div style={{ position: "absolute", top: 378, left: "50%", transform: "translateX(-50%)", width: interpolate(frame, [20, 40], [0, 260], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }), height: 1, background: `linear-gradient(90deg, transparent, rgba(212,168,47,0.4), transparent)`, zIndex: 3 }} />
 
-      {/* Badges — billets + hôtel */}
-      <div style={{ position: "absolute", top: 398, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 18, zIndex: 3 }}>
-        <div style={{ opacity: b1Op, transform: `scale(${interpolate(b1Sc, [0, 1], [0.72, 1])})` }}>
-          <div style={{ padding: "14px 24px", background: "rgba(212,168,47,0.10)", border: `1.5px solid rgba(212,168,47,0.55)`, borderRadius: 14, textAlign: "center", minWidth: 148 }}>
-            <div style={{ fontSize: 24, marginBottom: 4 }}>🎟️</div>
-            <div style={{ fontSize: 13, color: GOLD, letterSpacing: 4, marginBottom: 2 }}>TOUTES</div>
-            <div style={{ fontSize: 26, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 1 }}>CATEGORIES</div>
+      {/* Badges — billets + hôtel, grands et centrés */}
+      <div style={{ position: "absolute", top: 390, left: 30, right: 30, display: "flex", justifyContent: "center", gap: 24, zIndex: 3 }}>
+        <div style={{ opacity: b1Op, transform: `scale(${interpolate(b1Sc, [0, 1], [0.72, 1])})`, flex: 1 }}>
+          <div style={{ padding: "22px 18px", background: "rgba(212,168,47,0.12)", border: `2px solid rgba(212,168,47,0.6)`, borderRadius: 18, textAlign: "center" }}>
+            <div style={{ fontSize: 42, marginBottom: 6 }}>🎟️</div>
+            <div style={{ fontSize: 16, color: GOLD, letterSpacing: 4, marginBottom: 4 }}>TOUTES</div>
+            <div style={{ fontSize: 36, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold" }}>CATEGORIES</div>
           </div>
         </div>
-        <div style={{ opacity: b2Op, transform: `scale(${interpolate(b2Sc, [0, 1], [0.72, 1])})` }}>
-          <div style={{ padding: "14px 24px", background: "rgba(212,168,47,0.10)", border: `1.5px solid rgba(212,168,47,0.55)`, borderRadius: 14, textAlign: "center", minWidth: 148 }}>
-            <div style={{ fontSize: 24, marginBottom: 4 }}>🏨</div>
-            <div style={{ fontSize: 13, color: GOLD, letterSpacing: 4, marginBottom: 2 }}>PACK</div>
-            <div style={{ fontSize: 26, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold", letterSpacing: 1 }}>HOTEL</div>
+        <div style={{ opacity: b2Op, transform: `scale(${interpolate(b2Sc, [0, 1], [0.72, 1])})`, flex: 1 }}>
+          <div style={{ padding: "22px 18px", background: "rgba(212,168,47,0.12)", border: `2px solid rgba(212,168,47,0.6)`, borderRadius: 18, textAlign: "center" }}>
+            <div style={{ fontSize: 42, marginBottom: 6 }}>🏨</div>
+            <div style={{ fontSize: 16, color: GOLD, letterSpacing: 4, marginBottom: 4 }}>PACK</div>
+            <div style={{ fontSize: 36, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold" }}>HOTEL</div>
           </div>
         </div>
       </div>
