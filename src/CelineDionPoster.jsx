@@ -55,28 +55,10 @@ export const CelineDionPoster = () => (
       background: "conic-gradient(from -18deg at 50% 0%, transparent 0deg, rgba(255,245,200,0.055) 18deg, transparent 36deg)",
     }} />
 
-    {/* ── Photo Céline — centrée en arrière-plan ── */}
+    {/* ── Glow central décoratif ── */}
     <div style={{
-      position: "absolute",
-      top: "50%", left: "50%",
-      transform: "translate(-50%, -50%)",
-      width: 1000, height: 1000,
-      zIndex: 1,
-      opacity: 0.72,
-    }}>
-      <img
-        src={staticFile("IMG_4446_cutout.png")}
-        style={{
-          width: "100%", height: "100%",
-          objectFit: "contain", objectPosition: "center center",
-          filter: "drop-shadow(0 0 80px rgba(212,168,47,0.3))",
-        }}
-      />
-    </div>
-    {/* Voile sombre par-dessus la photo pour lisibilité */}
-    <div style={{
-      position: "absolute", inset: 0, zIndex: 2,
-      background: "rgba(5,5,8,0.38)",
+      position: "absolute", inset: 0, zIndex: 1,
+      background: "radial-gradient(ellipse 70% 60% at 50% 50%, rgba(45,16,96,0.55) 0%, transparent 70%)",
     }} />
 
     {/* ═══════════════ CONTENU ═══════════════ */}
