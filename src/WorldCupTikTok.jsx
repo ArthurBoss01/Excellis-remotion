@@ -150,7 +150,7 @@ const SceneTrophee = () => {
       <div style={{
         position: "absolute",
         top: "50%", left: "50%",
-        transform: `translate(-50%, calc(-50% - 60px)) translateY(${tropY}px)`,
+        transform: `translate(calc(-50% + 70px), calc(-50% - 60px)) translateY(${tropY}px)`,
         width: 820, height: 1060,
         opacity: tropOp, zIndex: 2,
       }}>
