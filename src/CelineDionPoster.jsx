@@ -55,38 +55,29 @@ export const CelineDionPoster = () => (
       background: "conic-gradient(from -18deg at 50% 0%, transparent 0deg, rgba(255,245,200,0.055) 18deg, transparent 36deg)",
     }} />
 
-    {/* ── Photo Céline — centrée droite, grande ── */}
+    {/* ── Photo Céline — centrée en arrière-plan ── */}
     <div style={{
       position: "absolute",
-      bottom: 90, right: -30,
-      width: 820, height: 820,
+      top: "50%", left: "50%",
+      transform: "translate(-50%, -50%)",
+      width: 1000, height: 1000,
       zIndex: 1,
+      opacity: 0.72,
     }}>
-      <div style={{
-        position: "absolute", inset: -60,
-        background: "radial-gradient(ellipse 60% 55% at 50% 42%, rgba(212,168,47,0.22) 0%, rgba(100,50,180,0.10) 55%, transparent 75%)",
-        filter: "blur(32px)",
-      }} />
       <img
         src={staticFile("IMG_4446_cutout.png")}
         style={{
-          position: "absolute", inset: 0,
           width: "100%", height: "100%",
-          objectFit: "contain", objectPosition: "center bottom",
-          filter: "drop-shadow(0 0 80px rgba(212,168,47,0.35)) drop-shadow(0 30px 100px rgba(0,0,0,0.97))",
+          objectFit: "contain", objectPosition: "center center",
+          filter: "drop-shadow(0 0 80px rgba(212,168,47,0.3))",
         }}
       />
-      {/* Fondu bas */}
-      <div style={{
-        position: "absolute", bottom: 0, left: 0, right: 0, height: "25%",
-        background: `linear-gradient(0deg, ${BLACK} 0%, transparent 100%)`, zIndex: 2,
-      }} />
-      {/* Fondu gauche pour lisibilité prix */}
-      <div style={{
-        position: "absolute", top: 0, bottom: 0, left: 0, width: "40%",
-        background: `linear-gradient(90deg, rgba(5,5,8,0.95) 0%, rgba(5,5,8,0.5) 60%, transparent 100%)`, zIndex: 2,
-      }} />
     </div>
+    {/* Voile sombre par-dessus la photo pour lisibilité */}
+    <div style={{
+      position: "absolute", inset: 0, zIndex: 2,
+      background: "rgba(5,5,8,0.38)",
+    }} />
 
     {/* ═══════════════ CONTENU ═══════════════ */}
 
@@ -178,10 +169,10 @@ export const CelineDionPoster = () => (
       border: `2px solid rgba(212,168,47,0.5)`,
       borderRadius: 16,
     }}>
-      <div style={{ fontSize: 20, color: ROSE, letterSpacing: 5, marginBottom: 10, fontWeight: "bold" }}>
+      <div style={{ fontSize: 26, color: ROSE, letterSpacing: 5, marginBottom: 14, fontWeight: "bold" }}>
         ⚠️ IMPORTANT
       </div>
-      <div style={{ fontSize: 28, color: WHITE, lineHeight: 1.45, fontStyle: "italic" }}>
+      <div style={{ fontSize: 38, color: WHITE, lineHeight: 1.4, fontStyle: "italic" }}>
         En raison de la forte demande, un acompte est requis pour valider votre précommande et garantir votre place.
       </div>
     </div>
