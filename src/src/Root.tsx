@@ -3,6 +3,7 @@ import { ExcellisVideo } from "../ExcellisVideo";
 import { CelineDionTikTok } from "../CelineDionTikTok";
 import { RolandGarrosTikTok } from "../RolandGarrosTikTok";
 import { WorldCupTikTok } from "../WorldCupTikTok";
+import { CelineDionPoster } from "../CelineDionPoster";
 
 export const RemotionRoot = () => (
   <>
@@ -34,6 +35,14 @@ export const RemotionRoot = () => (
       id="WorldCupTikTok"
       component={WorldCupTikTok}
       durationInFrames={300}
+      fps={30}
+      width={1080}
+      height={1920}
+    />
+    <Composition
+      id="CelineDionPoster"
+      component={CelineDionPoster}
+      durationInFrames={1}
       fps={30}
       width={1080}
       height={1920}
