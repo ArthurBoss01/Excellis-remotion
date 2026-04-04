@@ -150,7 +150,7 @@ const SceneTrophee = () => {
       <div style={{
         position: "absolute",
         top: "50%", left: "50%",
-        transform: `translate(-50%, -50%) translateY(${tropY}px)`,
+        transform: `translate(-50%, calc(-50% - 60px)) translateY(${tropY}px)`,
         width: 820, height: 1060,
         opacity: tropOp, zIndex: 2,
       }}>
@@ -254,8 +254,8 @@ const SceneCTA = () => {
         <div style={{ opacity: b1Op, transform: `scale(${interpolate(b1Sc, [0, 1], [0.72, 1])})`, flex: 1 }}>
           <div style={{ padding: "22px 18px", background: "rgba(212,168,47,0.12)", border: `2px solid rgba(212,168,47,0.6)`, borderRadius: 18, textAlign: "center" }}>
             <div style={{ fontSize: 42, marginBottom: 6 }}>🎟️</div>
-            <div style={{ fontSize: 16, color: GOLD, letterSpacing: 4, marginBottom: 4 }}>TOUTES</div>
-            <div style={{ fontSize: 36, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold" }}>CATEGORIES</div>
+            <div style={{ fontSize: 16, color: GOLD, letterSpacing: 4, marginBottom: 4 }}>TOUTES LES</div>
+            <div style={{ fontSize: 36, color: WHITE, fontFamily: "Georgia, serif", fontWeight: "bold" }}>DATES</div>
           </div>
         </div>
         <div style={{ opacity: b2Op, transform: `scale(${interpolate(b2Sc, [0, 1], [0.72, 1])})`, flex: 1 }}>
