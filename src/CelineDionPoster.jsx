@@ -27,6 +27,8 @@ const dates = [
     tickets: ["DUO TRIBUNE OR ALLEE"] },
   { day: "9",  month: "OCT",  dow: "VENDREDI",
     tickets: ["DUO CAT 2 TRIBUNE HAUTE"] },
+  { day: "10", month: "OCT",  dow: "SAMEDI",
+    tickets: ["x6 COTES A COTES · CAT 2 PARTERRE"] },
 ];
 
 const ticketColor = (t) => {
